@@ -1,0 +1,16 @@
+{
+	"Body":{"label":"","direction":0,"source":"Face","color":false,"condition":"true","colors":[["White",0],["Tan",0,0.8,0],["Brown",24,-1,0.5],["Black",24,-1,0.3],["Gray",24,0,0,0.35],["Blue",0,0,0.5,0.5]]},
+	"Clothing":{"label":"","direction":0,"source":"Walk","color":false,"condition":"true","colors":[]},
+	"Rear Hair":{"label":"","direction":3,"source":"Walk","color":true,"condition":"true","colors":[["Blonde",0],["Brown",-27,-0.5,0.8],["Black",-27,-1,0.3],["White",0,0,1,0.5],["Gray",0,0,0.5,0.5],["Green",60],["Teal",120],["Blue",180],["Purple",240],["Red",300]]},
+	"Tail":{"label":"","direction":3,"source":"Walk","color":true,"condition":"true","colors":[]},
+	"Wing":{"label":"","direction":3,"source":"Walk","color":true,"condition":"true","colors":[]},
+	"Eyebrows":{"label":"","direction":1,"source":"Face","color":true,"condition":"true","colors":[["Blonde",0],["Brown",-27,-0.5,0.8],["Black",-27,-1,0.3],["White",0,0,1,0.5],["Gray",0,0,0.5,0.5],["Green",60],["Teal",120],["Blue",180],["Purple",240],["Red",300]]},
+	"Nose":{"label":"","direction":0,"source":"Face","color":false,"condition":"true","colors":[["White",0],["Tan",0,0.8,0],["Brown",24,-1,0.5],["Black",24,-1,0.3],["Gray",24,0,0,0.35],["Blue",0,0,0.5,0.5]]},
+	"Mouth":{"label":"","direction":0,"source":"Face","color":false,"condition":"true","colors":[["White",0],["Tan",0,0.8,0],["Brown",24,-1,0.5],["Black",24,-1,0.3],["Gray",24,0,0,0.35],["Blue",0,0,0.5,0.5]]},
+	"Eyes":{"label":"","direction":0,"source":"Face","color":true,"condition":"true","colors":[["Blue",0],["Purple",60],["Red",120],["Yellow",180],["Green",240],["Teal",300],["Orange",180,1,0.8],["Sky Blue",0,1,1,0.35]]},
+	"Front Hair":{"direction":0,"source":"Walk","color":true,"condition":"true","colors":[["Blonde",0],["Brown",-27,-0.5,0.8],["Black",-27,-1,0.3],["White",0,0,1,0.5],["Gray",0,0,0.5,0.5],["Green",60],["Teal",120],["Blue",180],["Purple",240],["Red",300]],"label":""},
+	"Accessory A":{"direction":0,"source":"SV","color":true,"condition":"true","colors":[],"label":""},
+	"Accessory B":{"direction":0,"source":"SV","color":true,"condition":"true","colors":[],"label":""},
+	"Glasses":{"direction":0,"source":"SV","color":true,"condition":"true","colors":[],"label":""},
+	"Beast Ears":{"direction":0,"source":"SV","color":true,"condition":"true","colors":[],"label":""}
+}

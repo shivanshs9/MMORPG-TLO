@@ -1,0 +1,57 @@
+<div id="LoginForm" class="panel panel-primary">
+	<div class="panel-heading">Login</div>
+	<div class="panel-body">
+	<div id="loginErrBox"></div>
+	<div class="input-group">
+		<span class="input-group-addon" id="username-addon"><i class="fa fa-user"></i></span>
+		<input type="text" class="form-control login-input" id="inputUsername" placeholder="Username" aria-describedby="username-addon">
+	</div><br />
+	<div class="input-group">
+		<span class="input-group-addon" id="password-addon"><i class="fa fa-lock"></i></span>
+		<input type="password" class="form-control login-input" id="inputPassword" placeholder="Password" aria-describedby="password-addon">
+	</div><br />
+	<button id="btnConnect" class="btn btn-primary">Connect</button>
+	<button id="btnRegister" class="btn btn-default">Register</button>
+	<button id="btnForgotPassword" class="btn btn-link btn-sm">Forgot Password?</button>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function Html_Auth_Form_Login() {
+		this.initialize.apply(this, arguments)
+	}
+	Html_Auth_Form_Login.prototype.initialize = function(params) {
+		this._handler_submit = params[0]
+	}
+	Html_Auth_Form_Login.prototype.callSubmitHandler = function() {
+		var username = $("#inputUsername").val();
+    	var password = $("#inputPassword").val();
+		return this._handler_submit(username, password)
+	}
+	Html_Auth_Form_Login.prototype.displayError = function(msg) {
+		$("#loginErrBox").html('<div class="alert alert-danger fade in">'+msg+'</div>');
+	}
+	Html_Auth_Form_Login.prototype.displayInfo = function(msg) {
+		$("#loginErrBox").html('<div class="alert alert-info fade in">'+msg+'</div>');
+	}
+	Html_Auth_Form_Login.prototype.displaySuccess = function(msg) {
+		$("#loginErrBox").html('<div class="alert alert-success fade in">'+msg+'</div>');
+	}
+	var $authFormLogin;
+
+	$("#inputUsername").focus();
+	// $("#inputUsername").tap(function(){$("#inputUsername").focus();});
+	// $("#inputPassword").tap(function(){$("#inputPassword").focus();});
+
+	$(".login-input").keypress(function(e){
+		if (e.which == 13) { //enter
+			$authFormLogin.callSubmitHandler()
+		}
+	});
+	$("#btnConnect").bind("click touchstart",function() {
+		$authFormLogin.callSubmitHandler()
+	});
+	$("#btnRegister").bind("click touchstart",function() {
+		window.open('auth/register', '_blank').focus()
+	});
+<\/script>
