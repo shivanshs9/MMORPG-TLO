@@ -176,7 +176,7 @@ MMO_Scene_Auth_Login.prototype.attemptLogin = function(params) {
   .fail(function (jqXHR) {
     var data = jqXHR.responseJSON;
     console.error(data);
-    return that.loginFormHandler.displayError("Error: " + data.detail);
+    return that.loginFormHandler.displayError("Error: " + data[0]);
   });
 };
 

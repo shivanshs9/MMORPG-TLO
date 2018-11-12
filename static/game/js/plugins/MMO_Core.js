@@ -23,6 +23,9 @@ Imported["MMO Core"] = '0.0.1';
 * @desc API server protocol for HTTP connections - 'http' or 'https'
 * @default http
 * 
+* @param Game Core Socket Endpoint
+* @desc Websocket endpoint to use for critical game data exchange on login.
+* @default game/
 *
 * @help
 * ============================================================================
@@ -62,6 +65,8 @@ MMO_Game_Network.prototype.initialize = function() {
   this._serverURL = String(params['Server Base URL']);
   this._sockets = {};
   this._token = null;
+
+  this._gameDataEndpoint = String(params['Game Core Socket Endpoint']);
 };
 
 MMO_Game_Network.prototype.setToken = function(token) {
@@ -79,6 +84,31 @@ MMO_Game_Network.prototype.getSocketUrl = function(endpoint) {
 
 MMO_Game_Network.prototype.postLogin = function() {
   console.log("Post Login");
+
+  let socket = this.connectSocket('core', this._gameDataEndpoint);
+  socket.onmessage = function(event) {
+    console.log(event);
+  };
+  var _socket_onopen = socket.onopen;
+  socket.onopen = function(event) {
+    _socket_onopen.call(this, event);
+    alert("You're online!");
+  };
+  var _socket_onclose = socket.onclose;
+  socket.onclose = function(event) {
+    _socket_onclose.call(this, event);
+    alert("You're offline!");
+  }
+  setTimeout(function() {socket.send({command: 'command.list_users'})}, 1000);
+}
+
+MMO_Game_Network.prototype.authenticateRequest = function(settings) {
+  if (this._token) {
+    settings['headers'] = {
+      Authorization: "Token " + this._token
+    }
+  }
+  return settings;
 }
 
 MMO_Game_Network.prototype.connectSocket = function(socket_name, endpoint) {
@@ -101,11 +131,6 @@ MMO_Game_Network.prototype.connectSocket = function(socket_name, endpoint) {
   };
   return socket;
 };
-
-MMO_Game_Network.prototype.sendMessage = function(socket_name, data) {
-  var socket = this._socket[socket_name];
-  socket.sendMessage(data);
-}
 
 //-----------------------------------------------------------------------------
 // Overriding 'Input._onKeyDown' to pass 'event' as parameter

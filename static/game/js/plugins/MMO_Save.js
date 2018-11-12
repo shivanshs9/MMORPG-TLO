@@ -59,10 +59,12 @@ _.playerEndpoint = String(params['Player Data Endpoint']);
 
 _.postSaveData = function(data) {
   let settings = {
+    type: 'PUT',
     url: $gameNetwork.getHttpUrl(_.saveEndpoint),
     data: data
   };
-  $.post(settings).fail(function(data) {
+  settings = $gameNetwork.authenticateRequest(settings);
+  $.ajax(settings).fail(function(data) {
     console.error(data);
   });
 }
@@ -73,6 +75,7 @@ _.getLoadData = function() {
     async: false
   };
   let result = null;
+  settings = $gameNetwork.authenticateRequest(settings);
   $.get(settings).done(function(data) {
     result = data;
   }).fail(function(data) {
@@ -83,16 +86,19 @@ _.getLoadData = function() {
 
 _.getPlayerData = function(success, error) {
   let url = $gameNetwork.getHttpUrl(_.playerEndpoint);
-  $.get(url).done(success.bind(this)).fail(error.bind(this));
+  settings = $gameNetwork.authenticateRequest({url: url});
+  $.get(settings).done(success.bind(this)).fail(error.bind(this));
 }
 
 _.postPlayerData = function(data) {
   let url = $gameNetwork.getHttpUrl(_.playerEndpoint);
   let settings = {
+    type: 'PUT',
     url: url,
     data: data
   }
-  $.post(settings).fail(function(data) {console.error(data);});
+  settings = $gameNetwork.authenticateRequest(settings);
+  $.ajax(settings).fail(function(data) {console.error(data);});
 }
 
 _.savePlayerStats = function(actor) {

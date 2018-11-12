@@ -21,6 +21,14 @@ Coming soon.
 - Redis
 - Channels
 
+### Instructions
+To start up server, install all the python requirements (`pip install -r requirements.txt`) and run in shell:
+```
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
+
 ### Credits
 - KadoKawa for its RMMV game engine (and personally, for all its previous installments).
 - [RMN Music Pack](https://rpgmaker.net/musicpack/) for some of its beautiful music tracks.

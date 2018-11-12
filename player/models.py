@@ -2,7 +2,6 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.functional import cached_property
 
 
 def player_avatar_path(instance, filename):
@@ -31,21 +30,8 @@ class Player(AbstractUser):
 		null=True, blank=True
 	)
 
-	active_channel = models.CharField(max_length=100, blank=True, null=True)
-
 	def __str__(self):
 		if self.ign:
 			return f'Player: {self.ign}'
 		else:
 			return f'User: {self.username}'
-
-	@cached_property
-	def details(self):
-		data = {
-			'ign': self.ign,
-			'art': self.art,
-			'avatar_uri': self.avatar_uri,
-			'level': self.level,
-			'gold': self.gold
-		}
-		return data

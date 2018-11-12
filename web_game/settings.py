@@ -37,6 +37,9 @@ INSTALLED_APPS = [
 	'django.contrib.sessions',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
+
+	'rest_framework',
+
 	'channels',
 	'chat',
 	'game',
@@ -81,6 +84,13 @@ TEMPLATES = [
 	},
 ]
 
+REST_FRAMEWORK = {
+	'DEFAULT_AUTHENTICATION_CLASSES': (
+		'authentication.auth.TokenAuthentication',
+		'common.auth.CsrfExemptSessionAuthentication',
+	),
+}
+
 WSGI_APPLICATION = 'web_game.wsgi.application'
 
 
@@ -98,6 +108,8 @@ CACHES = {
 	'default': {
 		'BACKEND': 'redis_cache.RedisCache',
 		'LOCATION': '127.0.0.1:6379',
+		'KEY_PREFIX': 'tlo.',
+		'TIMEOUT': None
 	},
 }
 

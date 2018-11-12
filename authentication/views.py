@@ -1,45 +1,41 @@
 import logging
 
-from django.contrib.auth import authenticate, login
-from django.http import JsonResponse
-from django.views import View
+from django.contrib.auth import login
+from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
 
-from authentication import create_auth_token
+from authentication import create_auth_token, serializers
 
 logger = logging.getLogger(__name__)
 
 
-class LoginView(View):
+class LoginView(GenericAPIView):
 	"""
 	Check the credentials and return the REST Token if the credentials are valid.
-	Calls Django Auth login method to register User ID in Django session framework
 
 	Return the Authentication Token Object's key.
 	"""
+	serializer_class = serializers.LoginSerializer
+	permission_classes = (AllowAny, )
 
-	def get(self, request):
-		return JsonResponse(
-			{'detail': 'GET method is not allowed.'}, status=405)
+	def get_queryset(self):
+		return
 
-	def post(self, request):
-		msg = 'Invalid credentials provided.'
-		try:
-			username = request.POST['username']
-			password = request.POST['password']
-			user = authenticate(username=username, password=password)
-			if user:
-				if user.is_active:
-					return self.login(request, user)
-				else:
-					msg = 'User is banned.'
-		except KeyError:
-			msg = 'Provide both username and password in request body.'
-		return JsonResponse({'detail': msg}, status=400)
+	def login(self, user):
+		self.token = create_auth_token(user)
 
-	def login(self, request, user):
-		login(request, user)
-		token = create_auth_token(user)
-		return JsonResponse(
-			{'token': token},
-			status=200
-		)
+		# login(self.request, user)
+
+	def get_response(self):
+		serializer = serializers.TokenSerializer({'token': self.token})
+		return Response(serializer.data, status=HTTP_200_OK)
+
+	def post(self, request, *args, **kwargs):
+		self.request = request
+		serializer = self.get_serializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+
+		self.login(serializer.save())
+		return self.get_response()

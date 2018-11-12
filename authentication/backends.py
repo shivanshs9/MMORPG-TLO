@@ -2,8 +2,9 @@ import binascii
 
 from django.contrib.auth.backends import ModelBackend
 from django.utils import timezone
+from rest_framework import exceptions
 
-from authentication import CONSTANTS, crypto, exceptions
+from authentication import CONSTANTS, crypto
 from authentication.models import AuthToken
 
 try:
