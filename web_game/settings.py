@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 	'game',
 	'authentication',
 	'player',
+	'web',
 ]
 
 if DEBUG:

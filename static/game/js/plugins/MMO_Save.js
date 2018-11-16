@@ -28,7 +28,10 @@ Imported["MMO Save"] = '0.0.1';
 * Use plugin command, 'SavePlayerStats <Actor_ID>'.
 * @default player/self/
 *
-* Plugin Commands:
+* @help
+* =============================================================================
+* Plugin Commands
+* =============================================================================
 * - 'SavePlayerStats <Actor_ID>'
 * - 'SaveGame'
 *
@@ -52,7 +55,9 @@ if(!Imported["MMO Core"]) {
 // MMO.Save
 //----------------------------------------------------------------------------
 
-const params = PluginManager.parameters('MMO_Save');
+const params = $plugins.filter(function(p)
+{ return p.description.contains('<MMO.Save>'); })[0].parameters;
+
 _.saveEndpoint = String(params['Save Endpoint']);
 _.loadEndpoint = String(params['Load Endpoint']);
 _.playerEndpoint = String(params['Player Data Endpoint']);

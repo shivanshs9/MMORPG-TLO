@@ -29,7 +29,7 @@ Imported["MMO Core"] = '0.0.1';
 *
 * @help
 * ============================================================================
-* Introduction and Instructions
+* Introduction
 * ============================================================================
 * This entire core just points and connects to your api/sockets!
 *
@@ -47,90 +47,119 @@ function MMO_Game_Network() {
 "use strict";
 
 //----------------------------------------------------------------------------
+// MMO_Game_Network
+//----------------------------------------------------------------------------
+(function(_) {
+  _.prototype.initialize = function(params) {
+    this._httpProtocol = String(params['Server HTTP Protocol']);
+    this._socketProtocol = (this._httpProtocol === 'http') ? 'ws' : 'wss';
+    this._serverURL = String(params['Server Base URL']);
+    this._sockets = {};
+    this._token = null;
+    this.username = null;
+  };
+  
+  _.prototype.setToken = function(token) {
+    this._token = token;
+    this.postLogin()
+  }
+  
+  _.prototype.getHttpUrl = function(endpoint) {
+    return this._httpProtocol + '://' + this._serverURL + endpoint;
+  }
+  
+  _.prototype.getSocketUrl = function(endpoint) {
+    return this._socketProtocol + '://' + this._serverURL + endpoint;
+  }
+  
+  _.prototype.postLogin = function() {
+    console.log("Post Login");
+  }
+  
+  _.prototype.authenticateRequest = function(settings) {
+    if (this._token) {
+      settings['headers'] = {
+        Authorization: "Token " + this._token
+      }
+    }
+    return settings;
+  }
+  
+  _.prototype.connectSocket = function(socket_name, endpoint) {
+    if (this._token == null) {
+      console.log('Missing token!');
+      return;
+    }
+    this._sockets[socket_name] = new ReWebSocket(
+      this.getSocketUrl(endpoint), ['Token', this._token], {debug: true});
+    var socket = this._sockets[socket_name];
+    var _socket_send = socket.send;
+    socket.send = function(data) {
+      _socket_send(JSON.stringify(data));
+    };
+    socket.onopen = function(event) {
+      console.log('Socket Opened: ' + event.currentTarget.url);
+    };
+    socket.onclose = function(event) {
+      console.log('Socket Closed');
+    };
+    return socket;
+  };
+  })(MMO_Game_Network);
+
+//----------------------------------------------------------------------------
 // MMO.Core
 //----------------------------------------------------------------------------
+const params = $plugins.filter(function(p)
+{ return p.description.contains('<MMO.Core>'); })[0].parameters;
 
-const params = PluginManager.parameters('MMO_Core');
+_.messageTypeNewUser = "game.new_user";
+_.messageTypeLeaveUser = "game.leave_user";
+_.messageTypeListUsers = "game.list_users";
+_.messageTypeDescribeUser = "game.describe_user";
+_.gameDataEndpoint = String(params['Game Core Socket Endpoint']);
 
-_.Scene_Boot_create = Scene_Boot.prototype.create;
-Scene_Boot.prototype.create = function() {
-  $gameNetwork = $gameNetwork || new MMO_Game_Network();
-
-  _.Scene_Boot_create.call(this);
-}
-
-MMO_Game_Network.prototype.initialize = function() {
-  this._httpProtocol = String(params['Server HTTP Protocol']);
-  this._socketProtocol = (this._httpProtocol === 'http') ? 'ws' : 'wss';
-  this._serverURL = String(params['Server Base URL']);
-  this._sockets = {};
-  this._token = null;
-
-  this._gameDataEndpoint = String(params['Game Core Socket Endpoint']);
-};
-
-MMO_Game_Network.prototype.setToken = function(token) {
-  this._token = token;
-  this.postLogin()
-}
-
-MMO_Game_Network.prototype.getHttpUrl = function(endpoint) {
-  return this._httpProtocol + '://' + this._serverURL + endpoint;
-}
-
-MMO_Game_Network.prototype.getSocketUrl = function(endpoint) {
-  return this._socketProtocol + '://' + this._serverURL + endpoint;
-}
-
+_.MMO_Game_Network_postLogin = MMO_Game_Network.prototype.postLogin;
 MMO_Game_Network.prototype.postLogin = function() {
-  console.log("Post Login");
+  _.MMO_Game_Network_postLogin.call(this);
 
-  let socket = this.connectSocket('core', this._gameDataEndpoint);
+  let socket = this.connectSocket('core', _.gameDataEndpoint);
   socket.onmessage = function(event) {
-    console.log(event);
+    let data = JSON.parse(event.data);
+    let count = parseInt($("#countUsers").html());
+    if (data.type === _.messageTypeNewUser) {
+      $("#countUsers").html(count + 1);
+      alertToast(data.username + " is online!");
+    } else if (data.type === _.messageTypeLeaveUser) {
+      $("#countUsers").html(count - 1);
+      alertToast(data.username + " left!");
+    } else if (data.type === _.messageTypeListUsers) {
+      $("#countUsers").html(data.users.length);
+    } else if (data.type === _.messageTypeDescribeUser) {
+      $gameNetwork.username = data.username;
+    }
   };
   var _socket_onopen = socket.onopen;
   socket.onopen = function(event) {
     _socket_onopen.call(this, event);
-    alert("You're online!");
+    alertToast("You're online!");
   };
   var _socket_onclose = socket.onclose;
   socket.onclose = function(event) {
     _socket_onclose.call(this, event);
-    alert("You're offline!");
+    alertToast("You're offline!");
   }
-  setTimeout(function() {socket.send({command: 'command.list_users'})}, 1000);
 }
 
-MMO_Game_Network.prototype.authenticateRequest = function(settings) {
-  if (this._token) {
-    settings['headers'] = {
-      Authorization: "Token " + this._token
-    }
-  }
-  return settings;
-}
+//----------------------------------------------------------------------------
+// Scene_Boot
+//----------------------------------------------------------------------------
+_.Scene_Boot_create = Scene_Boot.prototype.create;
+Scene_Boot.prototype.create = function() {
+  $gameNetwork = $gameNetwork || new MMO_Game_Network(params);
 
-MMO_Game_Network.prototype.connectSocket = function(socket_name, endpoint) {
-  if (this._token == null) {
-    console.log('Missing token!');
-    return;
-  }
-  this._sockets[socket_name] = new ReWebSocket(
-    this.getSocketUrl(endpoint), ['Token', this._token], {debug: true});
-  var socket = this._sockets[socket_name];
-  var _socket_send = socket.send;
-  socket.send = function(data) {
-    _socket_send(JSON.stringify(data));
-  };
-  socket.onopen = function(event) {
-    console.log('Socket Opened: ' + event.currentTarget.url);
-  };
-  socket.onclose = function(event) {
-    console.log('Socket Closed');
-  };
-  return socket;
-};
+  _.Scene_Boot_create.call(this);
+}
 
 //-----------------------------------------------------------------------------
 // Overriding 'Input._onKeyDown' to pass 'event' as parameter

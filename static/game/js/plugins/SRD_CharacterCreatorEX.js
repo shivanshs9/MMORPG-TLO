@@ -645,37 +645,36 @@ _.checkFileExists = function() {
 //-----------------------------------------------------------------------------
 // DataManager
 //-----------------------------------------------------------------------------
+(function($) {
+$._databaseFiles.push({name: '$dataCharacterCreator', src: "CharacterCreator.json"});
 
-// DataManager._testExceptions.push("CharacterCreator.json");
-
-DataManager._databaseFiles.push({name: '$dataCharacterCreator', src: "CharacterCreator.json"});
-
-_.DataManager_createGameObjects = DataManager.createGameObjects;
-DataManager.createGameObjects = function() {
-	_.DataManager_createGameObjects.call(this);
+var _createGameObjects = $.createGameObjects;
+$.createGameObjects = function() {
+	_createGameObjects.call(this);
 	$gameCharacterCreations = new Game_CharacterCreations();
 	_.preloadCharacterPieces();
 };
 
-_.DataManager_makeSaveContents = DataManager.makeSaveContents;
-DataManager.makeSaveContents = function() {
-	const contents = _.DataManager_makeSaveContents.apply(this, arguments);
+var _makeSaveContents = $.makeSaveContents;
+$.makeSaveContents = function() {
+	const contents = _makeSaveContents.apply(this, arguments);
 	contents.characterCreations = $gameCharacterCreations;
 	return contents;
 };
 
-_.DataManager_extractSaveContents = DataManager.extractSaveContents;
-DataManager.extractSaveContents = function(contents) {
-	_.DataManager_extractSaveContents.apply(this, arguments);
+var _extractSaveContents = $.extractSaveContents;
+$.extractSaveContents = function(contents) {
+	_extractSaveContents.apply(this, arguments);
 	$gameCharacterCreations = contents.characterCreations;
 };
 
-_.DataManager_makeSavefileInfo = DataManager.makeSavefileInfo;
-DataManager.makeSavefileInfo = function() {
-	const info = _.DataManager_makeSavefileInfo.apply(this, arguments);
+var _makeSavefileInfo = $.makeSavefileInfo;
+$.makeSavefileInfo = function() {
+	const info = _makeSavefileInfo.apply(this, arguments);
 	info.srd_cc_chars = $gameParty.charactersForSavefile2();
 	return info;
 };
+})(DataManager);
 
 //-----------------------------------------------------------------------------
 // BattleManager
@@ -925,14 +924,15 @@ Game_Interpreter.prototype.pluginCommand = function(command, args) {
 // Game_CharacterCreations
 //-----------------------------------------------------------------------------
 
-Game_CharacterCreations.prototype.initialize = function() {
+(function($) {
+$.prototype.initialize = function() {
 	this._data = [];
 	this._dataDd = [];
 	this._dataSv = [];
 	this._dataFace = [];
 };
 
-Game_CharacterCreations.prototype.addInfo = function(info, id, type) {
+$.prototype.addInfo = function(info, id, type) {
 	type = type || '';
 	if(type === '') {
 		this._data[id] = info;
@@ -945,14 +945,14 @@ Game_CharacterCreations.prototype.addInfo = function(info, id, type) {
 	}
 };
 
-Game_CharacterCreations.prototype.addInfos = function(id, info, info2, info3, info4) {
+$.prototype.addInfos = function(id, info, info2, info3, info4) {
 	this._data[id] = info;
 	this._dataDd[id] = info2;
 	this._dataSv[id] = info3;
 	this._dataFace[id] = info4;
 };
 
-Game_CharacterCreations.prototype.getInfo = function(id, type) {
+$.prototype.getInfo = function(id, type) {
 	type = type || '';
 	if(type === 'dead') {
 		return this._dataDd[id];
@@ -964,7 +964,7 @@ Game_CharacterCreations.prototype.getInfo = function(id, type) {
 	return this._data[id];
 };
 
-Game_CharacterCreations.prototype.hasInfo = function(id, type) {
+$.prototype.hasInfo = function(id, type) {
 	type = type || '';
 	if(type === 'dead') {
 		return !!this._dataDd[id];
@@ -976,7 +976,7 @@ Game_CharacterCreations.prototype.hasInfo = function(id, type) {
 	return !!this._data[id];
 };
 
-Game_CharacterCreations.prototype.buildBitmap = function(id, info) {
+$.prototype.buildBitmap = function(id, info) {
 	if($gameTemp.charConstructor === undefined) {
 		$gameTemp.charConstructor = new Window_CharacterCreator_Preview(0, 0, _.fileWidth, _.fileHeight);
 		$gameTemp.charConstructor._sprite.x = 0;
@@ -989,7 +989,7 @@ Game_CharacterCreations.prototype.buildBitmap = function(id, info) {
 	return bit;
 };
 
-Game_CharacterCreations.prototype.buildBitmapFromInfo = function(info, type) {
+$.prototype.buildBitmapFromInfo = function(info, type) {
 	if(!info) return null;
 	type = type || '';
 	if(type === '') {
@@ -1003,7 +1003,7 @@ Game_CharacterCreations.prototype.buildBitmapFromInfo = function(info, type) {
 	}
 };
 
-Game_CharacterCreations.prototype.buildBitmapDead = function(id, info) {
+$.prototype.buildBitmapDead = function(id, info) {
 	if($gameTemp.deadConstructor === undefined) {
 		$gameTemp.deadConstructor = new Window_CharacterCreator_Preview(0, 0, _.fileWidth, _.height);
 		$gameTemp.deadConstructor._sprite.x = 0;
@@ -1021,7 +1021,7 @@ Game_CharacterCreations.prototype.buildBitmapDead = function(id, info) {
 	return result;
 };
 
-Game_CharacterCreations.prototype.buildBitmapSv = function(id, info) {
+$.prototype.buildBitmapSv = function(id, info) {
 	if($gameTemp.svConstructor === undefined) {
 		$gameTemp.svConstructor = new Window_CharacterCreator_Preview(0, 0, _.svFileWidth, _.svFileHeight);
 		$gameTemp.svConstructor._sprite.x = 0;
@@ -1034,7 +1034,7 @@ Game_CharacterCreations.prototype.buildBitmapSv = function(id, info) {
 	return bit;
 };
 
-Game_CharacterCreations.prototype.buildBitmapFace = function(id, info) {
+$.prototype.buildBitmapFace = function(id, info) {
 	if($gameTemp.faceConstructor === undefined) {
 		$gameTemp.faceConstructor = new Window_CharacterCreator_Preview(0, 0, _.faceFileWidth, _.faceFileHeight);
 		$gameTemp.faceConstructor._sprite.x = 0;
@@ -1046,6 +1046,7 @@ Game_CharacterCreations.prototype.buildBitmapFace = function(id, info) {
 	const bit = Bitmap.snapSprite($gameTemp.faceConstructor._sprite, _.faceFileWidth, _.faceFileHeight);
 	return bit;
 };
+})(Game_CharacterCreations);
 
 Bitmap.snapSprite = function(stage, width, height) {
 	var bitmap = new Bitmap(width, height);
@@ -1099,11 +1100,11 @@ Scene_Map.prototype.needsFadeIn = function() {
 //-----------------------------------------------------------------------------
 // Scene_CharacterCreator
 //-----------------------------------------------------------------------------
+(function($) {
+$.prototype = Object.create(Scene_MenuBase.prototype);
+$.prototype.constructor = $;
 
-Scene_CharacterCreator.prototype = Object.create(Scene_MenuBase.prototype);
-Scene_CharacterCreator.prototype.constructor = Scene_CharacterCreator;
-
-Scene_CharacterCreator.prototype.initialize = function(actorId) {
+$.prototype.initialize = function(actorId) {
 	Scene_MenuBase.prototype.initialize.call(this);
 	if(!$gameSystem.characterCreatorColorIndex[$gameCharacterCreations._tempActorId]) {
 		$gameSystem.characterCreatorColorIndex[$gameCharacterCreations._tempActorId] = {};
@@ -1116,7 +1117,7 @@ Scene_CharacterCreator.prototype.initialize = function(actorId) {
 	}
 };
 
-Scene_CharacterCreator.prototype.create = function() {
+$.prototype.create = function() {
 	Scene_MenuBase.prototype.create.call(this);
 	this.createFolderList();
 	this.createFileList();
@@ -1134,24 +1135,24 @@ Scene_CharacterCreator.prototype.create = function() {
 
 if(_.fade) {
 
-Scene_CharacterCreator.prototype.start = function() {
+$.prototype.start = function() {
 	Scene_MenuBase.prototype.start.call(this);
 	this.startFadeIn(this.fadeSpeed(), false);
 };
 
-Scene_CharacterCreator.prototype.stop = function() {
+$.prototype.stop = function() {
 	Scene_MenuBase.prototype.stop.call(this);
 	this.startFadeOut(this.slowFadeSpeed(), false);
 };
 
 }
 
-Scene_CharacterCreator.prototype.terminate = function() {
+$.prototype.terminate = function() {
 	Scene_MenuBase.prototype.terminate.call(this);
 	$gamePlayer.setAllNeedsCustomUpdate();
 };
 
-Scene_CharacterCreator.prototype.createBackground = function() {
+$.prototype.createBackground = function() {
 	this._backgroundSprite = new TilingSprite();
 	if(_.background) {
 		this._backgroundSprite.bitmap = _.loadImage('Background');
@@ -1162,7 +1163,7 @@ Scene_CharacterCreator.prototype.createBackground = function() {
 	this.addChild(this._backgroundSprite);
 };
 
-Scene_CharacterCreator.prototype.update = function() {
+$.prototype.update = function() {
 	Scene_MenuBase.prototype.update.call(this);
 	if(this._isMessageActive) {
 		if(this._isMessageActive === 1) {
@@ -1175,14 +1176,14 @@ Scene_CharacterCreator.prototype.update = function() {
 	this.updateBackground();
 };
 
-Scene_CharacterCreator.prototype.updateBackground = function() {
+$.prototype.updateBackground = function() {
 	if(this._backgroundSprite) {
 		if(_.xScroll) this._backgroundSprite.origin.x += _.xScroll;
 		if(_.yScroll) this._backgroundSprite.origin.y += _.yScroll;
 	}
 };
 
-Scene_CharacterCreator.prototype.createFileList = function() {
+$.prototype.createFileList = function() {
 	this._fileList = new Window_CharacterCreator_FileList(this._folderList);
 	this._fileList.setHandler('ok', this.onFileListOK.bind(this));
 	this._fileList.setHandler('cancel', this.onFileListCancel.bind(this));
@@ -1191,7 +1192,7 @@ Scene_CharacterCreator.prototype.createFileList = function() {
 	this.addWindow(this._fileList);
 };
 
-Scene_CharacterCreator.prototype.createFolderList = function() {
+$.prototype.createFolderList = function() {
 	this._folderList = new Window_CharacterCreator_FolderList(this._mandatories);
 	this._folderList.setHandler('ok', this.onFolderListOK.bind(this));
 	this._folderList.setHandler('combined', this.onFolderListCombined.bind(this));
@@ -1201,7 +1202,7 @@ Scene_CharacterCreator.prototype.createFolderList = function() {
 	this.addWindow(this._folderList);
 };
 
-Scene_CharacterCreator.prototype.createPreviewFaceWindow = function() {
+$.prototype.createPreviewFaceWindow = function() {
 	this._previewWindowFace = new Window_CharacterCreator_Preview(0, 0, _.faceFileWidth, _.faceFileHeight, 'face');
 	this._previewWindowFace.x = (((Graphics.boxWidth - this._fileList.x - this._fileList.width) - this._previewWindowFace.width) / 2) + this._fileList.width + this._fileList.x + _.xOffset;
 	this._previewWindowFace.y = (Graphics.boxHeight - this._previewWindowFace.height) / 2;
@@ -1212,7 +1213,7 @@ Scene_CharacterCreator.prototype.createPreviewFaceWindow = function() {
 	}
 };
 
-Scene_CharacterCreator.prototype.createPreviewWindow = function() {
+$.prototype.createPreviewWindow = function() {
 	this._previewWindow = new Window_CharacterCreator_Preview(0, 0, _.width, _.height, 'char');
 	this._previewWindow.x = ((this._previewWindowFace.width - (this._previewWindow.width*2))/2) + this._previewWindowFace.x;
 	this._previewWindow.y = this._previewWindowFace.y +  this._previewWindowFace.height;
@@ -1223,7 +1224,7 @@ Scene_CharacterCreator.prototype.createPreviewWindow = function() {
 	}
 };
 
-Scene_CharacterCreator.prototype.createPreviewDeadWindow = function() {
+$.prototype.createPreviewDeadWindow = function() {
 	this._previewWindowDead = new Window_CharacterCreator_Preview(0, 0, _.width, _.height, 'dead');
 	this._previewWindowDead.x = this._previewWindow.x + this._previewWindow.width;
 	this._previewWindowDead.y = this._previewWindowFace.y +  this._previewWindowFace.height;
@@ -1234,7 +1235,7 @@ Scene_CharacterCreator.prototype.createPreviewDeadWindow = function() {
 	}
 };
 
-Scene_CharacterCreator.prototype.createPreviewSvWindow = function() {
+$.prototype.createPreviewSvWindow = function() {
 	this._previewWindowSv = new Window_CharacterCreator_Preview(0, 0, _.svWidth, _.svHeight, 'sv');
 	this._previewWindowSv.x = (((Graphics.boxWidth - this._fileList.x - this._fileList.width) - this._previewWindowSv.width) / 2) + this._fileList.width + this._fileList.x + _.xOffset;
 	this._previewWindowSv.y = this._previewWindowDead.y +  this._previewWindowDead.height;
@@ -1245,7 +1246,7 @@ Scene_CharacterCreator.prototype.createPreviewSvWindow = function() {
 	}
 };
 
-Scene_CharacterCreator.prototype.createHueWindow = function() {
+$.prototype.createHueWindow = function() {
 	this._hueWindow = new Window_HueSelector(0, 0, this._fileList, this);
 	this._hueWindow.setHandler('ok', this.onHueWindowOk.bind(this));
 	this._hueWindow.setHandler('cancel', this.onHueWindowCancel.bind(this));
@@ -1256,7 +1257,7 @@ Scene_CharacterCreator.prototype.createHueWindow = function() {
 	this._hueWindow.deactivate();
 };
 
-Scene_CharacterCreator.prototype.checkForAlreadyMandatory = function() {
+$.prototype.checkForAlreadyMandatory = function() {
 	if(this._loadedStuff === 4) {
 		for(let i = 0; i < _.mandatory.length; i++) {
 			this._mandatories[_.mandatory[i]] = false;
@@ -1275,12 +1276,12 @@ Scene_CharacterCreator.prototype.checkForAlreadyMandatory = function() {
 	}
 };
 
-Scene_CharacterCreator.prototype.createMessageWindow = function() {
+$.prototype.createMessageWindow = function() {
 	this._messageWindow = new Window_Message();
 	this.addWindow(this._messageWindow);
 };
 
-Scene_CharacterCreator.prototype.createConfirmBackground = function() {
+$.prototype.createConfirmBackground = function() {
 	this._confirmBack = new Sprite(new Bitmap(Graphics.boxWidth, Graphics.boxHeight));
 	this._confirmBack.bitmap.fillRect(0, 0, Graphics.boxWidth, Graphics.boxHeight, 'rgba(0, 0, 0, 0.7)');
 	this._confirmBack.opacity = 0;
@@ -1298,14 +1299,14 @@ Scene_CharacterCreator.prototype.createConfirmBackground = function() {
 	this.addChild(this._confirmBack);
 };
 
-Scene_CharacterCreator.prototype.createConfirmerWindow = function() {
+$.prototype.createConfirmerWindow = function() {
 	this._confirmer = new Window_CharacterCreatorConfirmation();
 	this._confirmer.setHandler('yes', this.exitDaScene.bind(this));
 	this._confirmer.setHandler('no', this.deconfirm.bind(this));
 	this.addChild(this._confirmer);
 };
 
-Scene_CharacterCreator.prototype.createTexterWindow = function() {
+$.prototype.createTexterWindow = function() {
 	this._texter = new Window_Base(0, 0, Graphics.boxWidth / 2, this._confirmer.fittingHeight(2));
 	this._texter.openness = 0;
 	this._texter.createContents = function() {
@@ -1317,17 +1318,17 @@ Scene_CharacterCreator.prototype.createTexterWindow = function() {
 	this.addChild(this._texter);
 };
 
-Scene_CharacterCreator.prototype.onFolderListOK = function() {
+$.prototype.onFolderListOK = function() {
 	this._combinedMode = false;
 	this.goToFiles();
 };
 
-Scene_CharacterCreator.prototype.onFolderListCombined = function() {
+$.prototype.onFolderListCombined = function() {
 	this._combinedMode = true;
 	this.goToFiles();
 };
 
-Scene_CharacterCreator.prototype.goToFiles = function() {
+$.prototype.goToFiles = function() {
 	this._fileList.setCombinedMode(this._combinedMode);
 	this._fileList.activate();
 	this._fileList.select(0);
@@ -1337,7 +1338,7 @@ Scene_CharacterCreator.prototype.goToFiles = function() {
 	}
 };
 
-Scene_CharacterCreator.prototype.checkMandatories = function() {
+$.prototype.checkMandatories = function() {
 	for(let i = 0; i < _.mandatory.length; i++) {
 		if(this._mandatories[_.mandatory[i]]) {
 			return true;
@@ -1346,7 +1347,7 @@ Scene_CharacterCreator.prototype.checkMandatories = function() {
 	return false;
 };
 
-Scene_CharacterCreator.prototype.onFolderListCancel = function() {
+$.prototype.onFolderListCancel = function() {
 	if(this.checkMandatories()) {
 		$gameMessage.add(_.mandatoryDialogue);
 		this._isMessageActive = 1;
@@ -1363,7 +1364,7 @@ Scene_CharacterCreator.prototype.onFolderListCancel = function() {
 	}
 };
 
-Scene_CharacterCreator.prototype.exitDaScene = function() {
+$.prototype.exitDaScene = function() {
 	if(_.console) {
 		console.log("var id = 0;\n$gameCharacterCreations.addInfos(id, " + 
 			JSON.stringify(this._previewWindow.info()) + ", " +
@@ -1379,7 +1380,7 @@ Scene_CharacterCreator.prototype.exitDaScene = function() {
 	this.popScene();
 };
 
-Scene_CharacterCreator.prototype.deconfirm = function() {
+$.prototype.deconfirm = function() {
 	this._confirmBack.opacitySpeed = -16;
 	this._confirmer.close();
 	this._texter.close();
@@ -1388,12 +1389,12 @@ Scene_CharacterCreator.prototype.deconfirm = function() {
 	this._folderList.activate();
 };
 
-Scene_CharacterCreator.prototype.getHueUsage = function() {
+$.prototype.getHueUsage = function() {
 	const data = $dataCharacterCreator[this._fileList.currentSectionNoPart()];
 	return data ? data.colors.length > 0 : false;
 };
 
-Scene_CharacterCreator.prototype.onFileListOK = function() {
+$.prototype.onFileListOK = function() {
 	this.saveCurrentSelection();
 	if(this.getHueUsage()) {
 		this._fileList.deactivate();
@@ -1404,7 +1405,7 @@ Scene_CharacterCreator.prototype.onFileListOK = function() {
 	}
 };
 
-Scene_CharacterCreator.prototype.onHueWindowCancel = function() {
+$.prototype.onHueWindowCancel = function() {
 	this._hueWindow.deselect();
 	this._hueWindow.deactivate();
 	this._fileList.activate();
@@ -1416,7 +1417,7 @@ Scene_CharacterCreator.prototype.onHueWindowCancel = function() {
 	this._hueWindow.refresh();
 };
 
-Scene_CharacterCreator.prototype.onHueWindowOk = function() {
+$.prototype.onHueWindowOk = function() {
 	this._hueWindow.deselect();
 	this._hueWindow.deactivate();
 	this._fileList.activate();
@@ -1425,7 +1426,7 @@ Scene_CharacterCreator.prototype.onHueWindowOk = function() {
 	this._hueWindow.refresh();
 };
 
-Scene_CharacterCreator.prototype.saveCurrentSelection = function() {
+$.prototype.saveCurrentSelection = function() {
 	if(!this._combinedMode) {
 		this._previewWindow.addImage(this._fileList.currentFilePath(), 
 			this._fileList.currentSection(), this._fileList.currentFile());
@@ -1454,7 +1455,7 @@ Scene_CharacterCreator.prototype.saveCurrentSelection = function() {
 	this._folderList.refresh();
 };
 
-Scene_CharacterCreator.prototype.shiftCurrentSelection = function(index) {
+$.prototype.shiftCurrentSelection = function(index) {
 	const section = this._fileList.currentSection();
 	const colorSec = this._fileList.currentSectionNoPart();
 	let color;
@@ -1479,26 +1480,28 @@ Scene_CharacterCreator.prototype.shiftCurrentSelection = function(index) {
 	}
 };
 
-Scene_CharacterCreator.prototype.onFileListCancel = function() {
+$.prototype.onFileListCancel = function() {
 	this._fileList.deselect();
 	this._fileList.deactivate();
 	this._folderList.activate();
 	this._hueWindow.close();
 };
+})(Scene_CharacterCreator);
 
 //-----------------------------------------------------------------------------
 // Sprite_Character
 //-----------------------------------------------------------------------------
 
-_.Sprite_Character_isImageChanged = Sprite_Character.prototype.isImageChanged;
-Sprite_Character.prototype.isImageChanged = function() {
-	return (_.Sprite_Character_isImageChanged.apply(this, arguments) || this._character.needsCustomUpdate());
+(function($) {
+var _isImageChanged = $.prototype.isImageChanged;
+$.prototype.isImageChanged = function() {
+	return (_isImageChanged.apply(this, arguments) || this._character.needsCustomUpdate());
 };
 
-_.Sprite_Character_setCharacterBitmap = Sprite_Character.prototype.setCharacterBitmap;
-Sprite_Character.prototype.setCharacterBitmap = function() {
+var _setCharacterBitmap = $.prototype.setCharacterBitmap;
+$.prototype.setCharacterBitmap = function() {
 	if(!this._character.hasSetImage()) {
-		_.Sprite_Character_setCharacterBitmap.call(this);
+		_setCharacterBitmap.call(this);
 	} else {
 		if(this._character.isDeadCustomCharacter()) {
 			this.bitmap = this._character.getCreatorBitmapDead();
@@ -1509,6 +1512,7 @@ Sprite_Character.prototype.setCharacterBitmap = function() {
 		this._isBigCharacter = true;
 	}
 };
+})(Sprite_Character);
 
 //-----------------------------------------------------------------------------
 // Sprite_Actor
@@ -1530,11 +1534,11 @@ Sprite_Actor.prototype.updateBitmap = function() {
 //-----------------------------------------------------------------------------
 // Sprite_DisplayCharacter
 //-----------------------------------------------------------------------------
+(function($) {
+$.prototype = Object.create(Sprite_Base.prototype);
+$.prototype.constructor = $;
 
-Sprite_DisplayCharacter.prototype = Object.create(Sprite_Base.prototype);
-Sprite_DisplayCharacter.prototype.constructor = Sprite_DisplayCharacter;
-
-Sprite_DisplayCharacter.prototype.initialize = function() {
+$.prototype.initialize = function() {
 	Sprite_Base.prototype.initialize.call(this);
 	this._stepCounter = 1;
 	this._stepDirection = 1;
@@ -1545,7 +1549,7 @@ Sprite_DisplayCharacter.prototype.initialize = function() {
 	this.refresh();
 };
 
-Sprite_DisplayCharacter.prototype.update = function() {
+$.prototype.update = function() {
 	Sprite_Base.prototype.update.call(this);
 	this._specificCounter++;
 	if(this._specificCounter % 10 === 0) {
@@ -1560,7 +1564,7 @@ Sprite_DisplayCharacter.prototype.update = function() {
 	}
 };
 
-Sprite_DisplayCharacter.prototype.refresh = function(reset) {
+$.prototype.refresh = function(reset) {
 	if(reset) {
 		this._stepCounter = 1;
 		this._stepDirection = 1;
@@ -1571,6 +1575,7 @@ Sprite_DisplayCharacter.prototype.refresh = function(reset) {
 		_.width, _.height);
 	if(!this.visible) this.visible = true;
 };
+})(Sprite_DisplayCharacter);
 
 //-----------------------------------------------------------------------------
 // Sprite_DisplayDeadCharacter
@@ -1602,11 +1607,11 @@ Sprite_DisplayBlankCharacter.prototype.refresh = function() {};
 //-----------------------------------------------------------------------------
 // Sprite_DisplaySvCharacter
 //-----------------------------------------------------------------------------
+(function($) {
+$.prototype = Object.create(Sprite_Base.prototype);
+$.prototype.constructor = $;
 
-Sprite_DisplaySvCharacter.prototype = Object.create(Sprite_Base.prototype);
-Sprite_DisplaySvCharacter.prototype.constructor = Sprite_DisplaySvCharacter;
-
-Sprite_DisplaySvCharacter.prototype.initialize = function() {
+$.prototype.initialize = function() {
 	Sprite_Base.prototype.initialize.call(this);
 	this._stepCounter = 0;
 	this._stepDirection = 1;
@@ -1617,7 +1622,7 @@ Sprite_DisplaySvCharacter.prototype.initialize = function() {
 	this.refresh();
 };
 
-Sprite_DisplaySvCharacter.prototype.update = function() {
+$.prototype.update = function() {
 	Sprite_Base.prototype.update.call(this);
 	this._specificCounter++;
 	if(this._specificCounter % 10 === 0) {
@@ -1638,7 +1643,7 @@ Sprite_DisplaySvCharacter.prototype.update = function() {
 	}
 };
 
-Sprite_DisplaySvCharacter.prototype.refresh = function(reset) {
+$.prototype.refresh = function(reset) {
 	if(reset) {
 		this._stepCounter = 0;
 		this._stepDirection = 1;
@@ -1650,12 +1655,13 @@ Sprite_DisplaySvCharacter.prototype.refresh = function(reset) {
 		_.svHeight * this._currentRow, _.svWidth, _.svHeight);
 	if(!this.visible) this.visible = true;
 };
+})(Sprite_DisplaySvCharacter);
 
 //-----------------------------------------------------------------------------
 // Window_Base
 //-----------------------------------------------------------------------------
-
-Window_Base.prototype.drawCustomCharacter = function(actor, x, y, bitmap) {
+(function($) {
+$.prototype.drawCustomCharacter = function(actor, x, y, bitmap) {
 	if(actor.hasSetImage()) {
 		bitmap = actor.getCreatorBitmapChar();
 	} else {
@@ -1670,7 +1676,7 @@ Window_Base.prototype.drawCustomCharacter = function(actor, x, y, bitmap) {
 	this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
 };
 
-Window_Base.prototype.drawCustomCharacterFromInfo = function(info, x, y) {
+$.prototype.drawCustomCharacterFromInfo = function(info, x, y) {
 	let bitmap = $gameCharacterCreations.buildBitmapFromInfo(info);
 	if(!bitmap) {
 		bitmap = _.loadImage('CustomCharacter', 0);
@@ -1683,25 +1689,25 @@ Window_Base.prototype.drawCustomCharacterFromInfo = function(info, x, y) {
 	this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
 };
 
-_.Window_Base_drawActorCharacter = Window_Base.prototype.drawActorCharacter;
-Window_Base.prototype.drawActorCharacter = function(actor, x, y) {
+_.$_drawActorCharacter = $.prototype.drawActorCharacter;
+$.prototype.drawActorCharacter = function(actor, x, y) {
 	if(actor.hasSetImage()) {
 		this.drawCustomCharacter(actor, x, y);
 	} else {
-		_.Window_Base_drawActorCharacter.apply(this, arguments);
+		_.$_drawActorCharacter.apply(this, arguments);
 	}
 };
 
-Window_Base.prototype.drawCustomFace = function(actor, x, y, w, h) {
-	const width = Window_Base._faceWidth;
-	const height = Window_Base._faceHeight;
+$.prototype.drawCustomFace = function(actor, x, y, w, h) {
+	const width = $._faceWidth;
+	const height = $._faceHeight;
 	w = w || width;
 	h = h || height;
 	const bitmap = this.getCustomFace(actor);
 	this.contents.blt(bitmap, 0, 0, width, height, x, y, w, h);
 };
 
-Window_Base.prototype.getCustomFace = function(actor) {
+$.prototype.getCustomFace = function(actor) {
 	if(actor.hasSetImage()) {
 		if($gameParty.inBattle()) {
 			if(BattleManager.customFaceCache[actor.actorId()]) {
@@ -1719,16 +1725,16 @@ Window_Base.prototype.getCustomFace = function(actor) {
 	}
 };
 
-_.Window_Base_drawActorFace = Window_Base.prototype.drawActorFace;
-Window_Base.prototype.drawActorFace = function(actor, x, y, width, height) {
+_.$_drawActorFace = $.prototype.drawActorFace;
+$.prototype.drawActorFace = function(actor, x, y, width, height) {
 	if(actor.hasSetImage()) {
 		this.drawCustomFace(actor, x, y, width, height);
 	} else {
-		_.Window_Base_drawActorFace.apply(this, arguments);
+		_.$_drawActorFace.apply(this, arguments);
 	}
 };
 
-Window_Base.prototype.drawCharacterFromBitmap = function(bitmap, x, y) {
+$.prototype.drawCharacterFromBitmap = function(bitmap, x, y) {
 	if(!bitmap) {
 		bitmap = _.loadImage('CustomCharacter', 0);
 	}
@@ -1741,9 +1747,9 @@ Window_Base.prototype.drawCharacterFromBitmap = function(bitmap, x, y) {
 	this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
 };
 
-Window_Base.prototype.drawFaceFromBitmap = function(bitmap, x, y, w, h) {
-	const width = Window_Base._faceWidth;
-	const height = Window_Base._faceHeight;
+$.prototype.drawFaceFromBitmap = function(bitmap, x, y, w, h) {
+	const width = $._faceWidth;
+	const height = $._faceHeight;
 	w = w || width;
 	h = h || height;
 	if(!bitmap) {
@@ -1752,7 +1758,7 @@ Window_Base.prototype.drawFaceFromBitmap = function(bitmap, x, y, w, h) {
 	this.contents.blt(bitmap, 0, 0, width, height, x, y, w, h);
 };
 
-Window_Base.prototype.drawSvActorFromBitmap = function(bitmap, x, y) {
+$.prototype.drawSvActorFromBitmap = function(bitmap, x, y) {
 	if(!bitmap) return;
 	var pw = bitmap.width / 9;
 	var ph = bitmap.height / 6;
@@ -1760,6 +1766,7 @@ Window_Base.prototype.drawSvActorFromBitmap = function(bitmap, x, y) {
 	var sy = 0;
 	this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
 };
+})(Window_Base);
 
 //-----------------------------------------------------------------------------
 // Window_Message
@@ -1942,31 +1949,32 @@ Window_BattleStatus.prototype.drawAllFaces = function() {
 // Window_CharacterCreator_FolderList
 //-----------------------------------------------------------------------------
 
-Window_CharacterCreator_FolderList.prototype = Object.create(Window_Command.prototype);
-Window_CharacterCreator_FolderList.prototype.constructor = Window_CharacterCreator_FolderList;
+(function($) {
+$.prototype = Object.create(Window_Command.prototype);
+$.prototype.constructor = $;
 
-Window_CharacterCreator_FolderList.prototype.initialize = function(mandatories) {
+$.prototype.initialize = function(mandatories) {
 	this._combines = {};
 	this._mandatories = mandatories;
 	Window_Command.prototype.initialize.call(this);
 };
 
-Window_CharacterCreator_FolderList.prototype.currentName = function() {
+$.prototype.currentName = function() {
 	return this._list[this.index()].name;
 };
 
-Window_CharacterCreator_FolderList.prototype.currentFolder = function() {
+$.prototype.currentFolder = function() {
 	if(this._combines[this._list[this.index()].name]) {
 		return this._combines[this._list[this.index()].name][0];
 	}
 	return this._list[this.index()].name;
 };
 
-Window_CharacterCreator_FolderList.prototype.combines = function() {
+$.prototype.combines = function() {
 	return this._combines[this._list[this.index()].name];
 };
 
-Window_CharacterCreator_FolderList.prototype.makeCommandList = function() {
+$.prototype.makeCommandList = function() {
 	const images = _.getFolderList();
 	for(let i = 0; i < images.length; i++) {
 		if(images[i]) {
@@ -2002,7 +2010,7 @@ Window_CharacterCreator_FolderList.prototype.makeCommandList = function() {
 	this.reorder();
 };
 
-Window_CharacterCreator_FolderList.prototype.drawItem = function(index) {
+$.prototype.drawItem = function(index) {
 	const rect = this.itemRectForText(index);
 	const align = this.itemTextAlign();
 	let name = this._list[index].name;
@@ -2017,7 +2025,7 @@ Window_CharacterCreator_FolderList.prototype.drawItem = function(index) {
 	this.resetTextColor();
 };
 
-Window_CharacterCreator_FolderList.prototype.reorder = function() {
+$.prototype.reorder = function() {
 	const result = [];
 	for(let i = 0; i < _.order.length; i++) {
 		const o = _.order[i];
@@ -2030,15 +2038,17 @@ Window_CharacterCreator_FolderList.prototype.reorder = function() {
 	}
 	this._list = result;
 };
+})(Window_CharacterCreator_FolderList);
 
 //-----------------------------------------------------------------------------
 // Window_CharacterCreator_FileList
 //-----------------------------------------------------------------------------
 
-Window_CharacterCreator_FileList.prototype = Object.create(Window_Command.prototype);
-Window_CharacterCreator_FileList.prototype.constructor = Window_CharacterCreator_FileList;
+(function($) {
+$.prototype = Object.create(Window_Command.prototype);
+$.prototype.constructor = $;
 
-Window_CharacterCreator_FileList.prototype.initialize = function(folderWindow) {
+$.prototype.initialize = function(folderWindow) {
 	this._folderWindow = folderWindow;
 	this._folder = this._folderWindow.currentFolder();
 	this._combinedMode = false;
@@ -2046,7 +2056,7 @@ Window_CharacterCreator_FileList.prototype.initialize = function(folderWindow) {
 	Window_Command.prototype.initialize.call(this);
 };
 
-Window_CharacterCreator_FileList.prototype._createStuff = function() {
+$.prototype._createStuff = function() {
 	this._list = [];
 	this.makeCommandList();
 	const section = this._folderWindow.currentName().trim();
@@ -2097,40 +2107,40 @@ Window_CharacterCreator_FileList.prototype._createStuff = function() {
 	this._allInfo = [filePath, sizes[0], sizes[1], wid, hei, xOff, yOff, dir];
 };
 
-Window_CharacterCreator_FileList.prototype.lineHeight = function() {
+$.prototype.lineHeight = function() {
 	return this.itemHeight();
 };
 
-Window_CharacterCreator_FileList.prototype.itemWidth = function() {
+$.prototype.itemWidth = function() {
 	return this._allInfo[3];
 };
 
-Window_CharacterCreator_FileList.prototype.itemHeight = function() {
+$.prototype.itemHeight = function() {
 	return this._allInfo[4];
 };
 
-Window_CharacterCreator_FileList.prototype.windowWidth = function() {
+$.prototype.windowWidth = function() {
 	return (this.itemWidth() * this.maxCols()) + (this.standardPadding() * 2)
 		 + (this.spacing() * (this.maxCols() - 1));
 };
 
-Window_CharacterCreator_FileList.prototype.maxCols = function() {
+$.prototype.maxCols = function() {
 	return (this._allInfo[3] > 100) ? _.bigCols : _.smallCols;
 };
 
-Window_CharacterCreator_FileList.prototype.setCombinedMode = function(combinedMode) {
+$.prototype.setCombinedMode = function(combinedMode) {
 	this._combinedMode = combinedMode;
 };
 
-Window_CharacterCreator_FileList.prototype.currentFile = function() {
+$.prototype.currentFile = function() {
 	return this._list[this.index()].name;
 };
 
-Window_CharacterCreator_FileList.prototype.currentSection = function() {
+$.prototype.currentSection = function() {
 	return this._folder;
 };
 
-Window_CharacterCreator_FileList.prototype.currentSectionNoPart = function() {
+$.prototype.currentSectionNoPart = function() {
 	let result = this._folder;
 	if(result.match(/\s*(.*)part\d+\s*/i)) {
 		result = String(RegExp.$1).trim();
@@ -2138,27 +2148,27 @@ Window_CharacterCreator_FileList.prototype.currentSectionNoPart = function() {
 	return result;
 };
 
-Window_CharacterCreator_FileList.prototype.currentFolder = function() {
+$.prototype.currentFolder = function() {
 	return this._folder + '/';
 };
 
-Window_CharacterCreator_FileList.prototype.currentFilePath = function() {
+$.prototype.currentFilePath = function() {
 	return _.path + this.currentFolder() + 'walk/';
 };
 
-Window_CharacterCreator_FileList.prototype.currentFilePathDead = function() {
+$.prototype.currentFilePathDead = function() {
 	return _.path + this.currentFolder() + 'dead/';
 };
 
-Window_CharacterCreator_FileList.prototype.currentFilePathSv = function() {
+$.prototype.currentFilePathSv = function() {
 	return _.path + this.currentFolder() + 'sv/';
 };
 
-Window_CharacterCreator_FileList.prototype.currentFilePathFace = function() {
+$.prototype.currentFilePathFace = function() {
 	return _.path + this.currentFolder() + 'face/';
 };
 
-Window_CharacterCreator_FileList.prototype.update = function() {
+$.prototype.update = function() {
 	Window_Command.prototype.update.call(this);
 	if(this._folder !== this._folderWindow.currentFolder()) {
 		this._folder = this._folderWindow.currentFolder();
@@ -2167,23 +2177,23 @@ Window_CharacterCreator_FileList.prototype.update = function() {
 	}
 };
 
-Window_CharacterCreator_FileList.prototype.refreshX = function() {
+$.prototype.refreshX = function() {
 	this.x = this._folderWindow.x + this._folderWindow.width;
 };
 
-Window_CharacterCreator_FileList.prototype.refreshY = function() {
+$.prototype.refreshY = function() {
 	this.y = this._folderWindow.y;
 };
 
-Window_CharacterCreator_FileList.prototype.refreshWidth = function() {
+$.prototype.refreshWidth = function() {
 	this.width = Math.min(this.windowWidth(), Graphics.boxWidth);
 };
 
-Window_CharacterCreator_FileList.prototype.refreshHeight = function() {
+$.prototype.refreshHeight = function() {
 	this.height = Math.min(this.windowHeight(), Graphics.boxHeight);
 };
 
-Window_CharacterCreator_FileList.prototype.refresh = function() {
+$.prototype.refresh = function() {
 	this.clearCommandList();
 	this._createStuff();
 	this.refreshWidth();
@@ -2194,7 +2204,7 @@ Window_CharacterCreator_FileList.prototype.refresh = function() {
 	Window_Selectable.prototype.refresh.call(this);
 };
 
-Window_CharacterCreator_FileList.prototype.makeCommandList = function() {
+$.prototype.makeCommandList = function() {
 	const images = _.getFileList(this.currentFolder());
 	for(let i = 0; i < images.length; i++) {
 		if(images[i]) {
@@ -2203,7 +2213,7 @@ Window_CharacterCreator_FileList.prototype.makeCommandList = function() {
 	}
 };
 
-Window_CharacterCreator_FileList.prototype.drawItem = function(index) {
+$.prototype.drawItem = function(index) {
 	const section = this._folderWindow.currentName().trim();
 	const rect = this.itemRectForText(index);
 	const file = this._list[index].name;
@@ -2227,15 +2237,17 @@ Window_CharacterCreator_FileList.prototype.drawItem = function(index) {
 	this.contents.blt(bit, this._allInfo[1], this._allInfo[2] * this._allInfo[7], this._allInfo[3], 
 		this._allInfo[4], rect.x + this._allInfo[5], rect.y + this._allInfo[6]);
 };
+})(Window_CharacterCreator_FileList);
 
 //-----------------------------------------------------------------------------
 // Window_CharacterCreator_Preview
 //-----------------------------------------------------------------------------
 
-Window_CharacterCreator_Preview.prototype = Object.create(Window_Base.prototype);
-Window_CharacterCreator_Preview.prototype.constructor = Window_CharacterCreator_Preview;
+(function($) {
+$.prototype = Object.create(Window_Base.prototype);
+$.prototype.constructor = $;
 
-Window_CharacterCreator_Preview.prototype.initialize = function(x, y, width, height, type) {
+$.prototype.initialize = function(x, y, width, height, type) {
 	Window_Base.prototype.initialize.call(this, x, y, 
 		width + (this.standardPadding() * 2), height + (this.standardPadding() * 2));
 	this._spritePieces = {};
@@ -2259,11 +2271,11 @@ Window_CharacterCreator_Preview.prototype.initialize = function(x, y, width, hei
 	this.addChild(this._sprite);
 };
 
-Window_CharacterCreator_Preview.prototype.info = function() {
+$.prototype.info = function() {
 	return this._pieces;
 };
 
-Window_CharacterCreator_Preview.prototype.setInfo = function(info) {
+$.prototype.setInfo = function(info) {
 	for(let key in this._spritePieces) {
 		this._sprite.removeChild(this._spritePieces[key]);
 	}
@@ -2273,7 +2285,7 @@ Window_CharacterCreator_Preview.prototype.setInfo = function(info) {
 	this.refresh();
 };
 
-Window_CharacterCreator_Preview.prototype.addImage = function(imagePath, section, file) {
+$.prototype.addImage = function(imagePath, section, file) {
 	let newColor = [0];
 	if(this._pieces[section] && this._pieces[section].color) {
 		newColor = JsonEx.makeDeepCopy(this._pieces[section].color);
@@ -2282,7 +2294,7 @@ Window_CharacterCreator_Preview.prototype.addImage = function(imagePath, section
 	this.refresh();
 };
 
-Window_CharacterCreator_Preview.prototype.setColor = function(section, hsl) {
+$.prototype.setColor = function(section, hsl) {
 	if(this._spritePieces[section]) {
 		this._spriteFilters[section].hue(0);
 		if(hsl[4]) this._spriteFilters[section].greyscale(hsl[4], true);
@@ -2293,7 +2305,7 @@ Window_CharacterCreator_Preview.prototype.setColor = function(section, hsl) {
 	}
 };
 
-Window_CharacterCreator_Preview.prototype.refresh = function() {
+$.prototype.refresh = function() {
 	for(let i = 0; i < _.priorities.length; i++) {
 		const section = _.priorities[i];
 		if(this._pieces[section]) {
@@ -2335,6 +2347,7 @@ Window_CharacterCreator_Preview.prototype.refresh = function() {
 		}
 	}
 };
+})(Window_CharacterCreator_Preview);
 
 //-----------------------------------------------------------------------------
 // Window_HueSelector

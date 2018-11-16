@@ -1,11 +1,4 @@
-/*
-* @Author: Vinxce
-* @Date:   2015-10-27 10:55:44
-* @Last Modified by:   Vinxce
-* @Last Modified time: 2015-10-27 21:31:32
-*/
-
-@keyframes fadeIn {
+@keyframes fade-in {
 	from 	{ opacity: 0; }
 	to 		{ opacity: 1; }
 }
@@ -15,21 +8,39 @@
 	text-shadow: none !important;
 	position: relative;
 	bottom: 50px;
-	animation: fadeIn 1 ease-in;
+	animation: fade-in 1 ease-in;
 }
 
-#RegisterForm{
-	margin: auto;
-	text-shadow: none !important;
-	position: relative;
-	bottom: 50px;
-	animation: fadeIn 1 ease-in;
+.toast {
+	position: fixed;
+	display: block;
+	bottom: 2em;
+	height: 2em;
+	width: 10em;
+	left: calc(50% - 5em);
+	animation: fade-in 1s 2 alternate;
+	background-color: black;
+	border-radius: 2em;
+	color: white;
+	text-align: center;
+	line-height: 2em;
+	opacity: 0;
+	z-index: 100;
 }
 
-#ActivationForm{
-	margin: auto;
-	text-shadow: none !important;
-	position: relative;
-	bottom: 50px;
-	animation: fadeIn 1 ease-in;
+.col-fixed-left {
+	width: 300px;
+	position: fixed;
+	height: 100%;
+	background: #00000080;
+	color: white;
+}
+
+.col-fixed-left .list-users {
+	height: 95%;
+}
+
+.col-fixed-left .list-users > li {
+	float: none;  /* Cancel default li float: left */
+	width: 100%;
 }

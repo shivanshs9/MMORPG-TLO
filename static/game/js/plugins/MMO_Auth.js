@@ -72,7 +72,8 @@ if(!Imported["MMO Core"]) {
 // MMO.Auth
 //----------------------------------------------------------------------------
 
-const params = PluginManager.parameters('MMO_Auth');
+const params = $plugins.filter(function(p)
+{ return p.description.contains('<MMO.Auth>'); })[0].parameters;
 
 _.loginEndpoint = String(params['Auth Endpoint for Login']);
 _.loginRequired = String(params['Force Login on Startup']).trim().toLowerCase() === 'true';
