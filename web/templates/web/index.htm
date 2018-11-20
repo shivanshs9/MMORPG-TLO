@@ -1,0 +1,300 @@
+{% extends "_base.htm" %}
+
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Header area -->
+<div id="header-wrapper" class="header-slider">
+	<header class="clearfix">
+		<div class="logo">
+			<img src="https://via.placeholder.com/180/000000/FFFFFF?text=Placeholder+logo" alt="TLO Logo" />
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="span12">
+					<div id="main-flexslider" class="flexslider">
+						<ul class="slides">
+							<li>
+								<p class="home-slide-content">
+									Point 1
+								</p>
+							</li>
+							<li>
+								<p class="home-slide-content">
+									Point 2
+								</p>
+							</li>
+							<li>
+								<p class="home-slide-content">
+									Point 3
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12 aligncenter flyRight">
+					<a href="{% url 'game:play' %}">
+						<i class="icon-play-circle icon-10x"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</header>
+</div>
+
+<!-- Banner spacer -->
+<section class="spacer green">
+	<div class="container">
+		<div class="row">
+			<div class="span6 alignright flyLeft">
+				<blockquote class="large">
+					Some quote for large banner <cite>Citations are important</cite>
+				</blockquote>
+			</div>
+			<div class="span6 aligncenter flyRight">
+				<i class="icon-gamepad icon-10x"></i>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- About-->
+<section id="about" class="section">
+	<div class="container">
+		<h4>What's all the hype about?</h4>
+		<div class="row">
+			<div class="span4 offset1">
+				<div>
+					<h2>The game is not for <strong>faint-hearted!</strong></h2>
+					<p>
+						Aut qui vitae fugit rerum architecto quidem. Ullam et nobis corporis. Soluta adipisci sunt at fugiat repellendus ut fugiat. Et sunt autem officiis quas libero quos.
+					</p>
+				</div>
+			</div>
+			<div class="span6">
+				<div class="aligncenter">
+					<img src="https://via.placeholder.com/180/000000/FFFFFF?text=Placeholder+icon" alt="" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span2 offset4 animated-slow flyIn">
+				<div class="people">
+					<img class="team-thumb img-circle" src="https://via.placeholder.com/180" alt="" />
+					<h3>TheFaker</h3>
+					<p>
+						Game director
+					</p>
+				</div>
+			</div>
+			<div class="span2 animated-slow flyIn">
+				<div class="people">
+					<img class="team-thumb img-circle" src="https://via.placeholder.com/180" alt="" />
+					<h3>Krishna Teja</h3>
+					<p>
+						Web developer
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- spacer section -->
+<section class="spacer bg3">
+	<div class="container">
+		<div class="row">
+			<div class="span12 aligncenter flyLeft">
+				<blockquote class="large">
+					Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+				</blockquote>
+			</div>
+			<div class="span12 aligncenter flyRight">
+				<i class="icon-rocket icon-10x"></i>
+			</div>
+		</div>
+	</div>
+</section>
+	
+
+<!-- RSS -->
+<section id="rss" class="section orange">
+	<div class="container">
+		<h4>Our RSS feeds</h4>
+		<div class="row">
+			<div class="span3">
+				<div class="home-post">
+					<div class="post-image">
+						<img class="max-img" src="https://via.placeholder.com/800x500?text=Cool+post" alt="" />
+					</div>
+					<div class="post-meta">
+						<i class="icon-file icon-2x"></i>
+						<span class="date">June 19, 2013</span>
+						<span class="tags"><a href="#">Design</a>, <a href="#">Blog</a></span>
+					</div>
+					<div class="entry-content">
+						<h5><strong><a href="#">Sample 1</a></strong></h5>
+						<p>
+							Lorem Ipsum is simply dummy text of the printing and typesetting industry. &hellip;
+						</p>
+						<a href="#" class="more">Read more</a>
+					</div>
+				</div>
+			</div>
+			<div class="span3">
+				<div class="home-post">
+					<div class="post-image">
+						<img class="max-img" src="https://via.placeholder.com/800x500?text=Cool+post" alt="" />
+					</div>
+					<div class="post-meta">
+						<i class="icon-file icon-2x"></i>
+						<span class="date">June 19, 2013</span>
+						<span class="tags"><a href="#">Design</a>, <a href="#">News</a></span>
+					</div>
+					<div class="entry-content">
+						<h5><strong><a href="#">Sample 2</a></strong></h5>
+						<p>
+							Lorem Ipsum is simply dummy text of the printing and typesetting industry. &hellip;
+						</p>
+						<a href="#" class="more">Read more</a>
+					</div>
+				</div>
+			</div>
+			<div class="span3">
+				<div class="home-post">
+					<div class="post-image">
+						<img class="max-img" src="https://via.placeholder.com/800x500?text=Cool+post" alt="" />
+					</div>
+					<div class="post-meta">
+						<i class="icon-file icon-2x"></i>
+						<span class="date">June 22, 2013</span>
+						<span class="tags"><a href="#">Design</a>, <a href="#">Tips</a></span>
+					</div>
+					<div class="entry-content">
+						<h5><strong><a href="#">Sample 3</a></strong></h5>
+						<p>
+							Lorem Ipsum is simply dummy text of the printing and typesetting industry. &hellip;
+						</p>
+						<a href="#" class="more">Read more</a>
+					</div>
+				</div>
+			</div>
+			<div class="span3">
+				<div class="home-post">
+					<div class="post-image">
+						<img class="max-img" src="https://via.placeholder.com/800x500?text=Cool+post" alt="" />
+					</div>
+					<div class="post-meta">
+						<i class="icon-file icon-2x"></i>
+						<span class="date">June 27, 2013</span>
+						<span class="tags"><a href="#">News</a>, <a href="#">Tutorial</a></span>
+					</div>
+					<div class="entry-content">
+						<h5><strong><a href="#">Sample 4</a></strong></h5>
+						<p>
+							Lorem Ipsum is simply dummy text of the printing and typesetting industry. &hellip;
+						</p>
+						<a href="#" class="more">Read more</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="blankdivider30"></div>
+		<div class="aligncenter">
+			<a href="#" class="btn btn-large btn-theme">More blog post</a>
+		</div>
+	</div>
+</section>
+
+<!-- Contact us -->
+<section id="contact" class="section green">
+	<div class="container">
+		<h4>Get in Touch</h4>
+		<p>
+			Reque facer nostro et ius, cu persius mnesarchum disputando eam, clita prompta et mel vidisse phaedrum pri et. Facilisis posidonium ex his. Mutat iudico vis in, mea aeque tamquam scripserit an, mea eu ignota viderer probatus. Lorem legere consetetur ei
+			eum. Sumo aeque assentior te eam, pri nominati posidonium consttuam
+		</p>
+		<div class="blankdivider30">
+		</div>
+		<div class="row">
+			<div class="span12">
+				<div class="cform" id="contact-form">
+					<div id="sendmessage">Your message has been sent. Thank you!</div>
+					<div id="errormessage"></div>
+					<form action="" method="post" role="form" class="contactForm">
+						<div class="row">
+							<div class="span6">
+								<div class="field your-name form-group">
+									<input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+									<div class="validation"></div>
+								</div>
+								<div class="field your-email form-group">
+									<input type="text" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+									<div class="validation"></div>
+								</div>
+								<div class="field subject form-group">
+									<input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+									<div class="validation"></div>
+								</div>
+							</div>
+							<div class="span6">
+								<div class="field message form-group">
+									<textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+									<div class="validation"></div>
+								</div>
+								<input type="submit" value="Send message" class="btn btn-theme pull-left">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<!-- ./span12 -->
+		</div>
+	</div>
+</section>
+{% endblock %}
+
+{% block footer %}
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="span6 offset3">
+				<ul class="social-networks">
+					<li><a href="#"><i class="icon-circled icon-bgdark icon-instagram icon-2x"></i></a></li>
+					<li><a href="#"><i class="icon-circled icon-bgdark icon-twitter icon-2x"></i></a></li>
+					<li><a href="#"><i class="icon-circled icon-bgdark icon-dribbble icon-2x"></i></a></li>
+					<li><a href="#"><i class="icon-circled icon-bgdark icon-pinterest icon-2x"></i></a></li>
+				</ul>
+				<p class="copyright">
+					&copy; The Lost Origins. All rights reserved.
+					<div class="credits">
+						Theme used: &copy; Maxim Theme.
+						Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+					</div>
+				</p>
+			</div>
+		</div>
+	</div>
+	<!-- ./container -->
+</footer>
+<a href="#" class="scrollup"><i class="icon-angle-up icon-square icon-bgdark icon-2x"></i></a>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.scrollTo.js' %}"></script>
+<script src="{% static 'js/jquery.nav.js' %}"></script>
+<script src="{% static 'js/jquery.localScroll.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script src="{% static 'js/isotope.js' %}"></script>
+<script src="{% static 'js/jquery.flexslider.js' %}"></script>
+<script src="{% static 'js/inview.js' %}"></script>
+<script src="{% static 'js/animate.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+{% endblock %}
+
+{% block nav_home %} active{% endblock %}

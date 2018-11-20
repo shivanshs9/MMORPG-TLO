@@ -7,6 +7,7 @@ from django.utils.functional import cached_property
 
 UserModel = get_user_model()
 
+
 class Save(models.Model):
 	player = models.OneToOneField(
 		UserModel, on_delete=models.CASCADE,
@@ -32,7 +33,8 @@ class Client(models.Model):
 		UserModel, on_delete=models.CASCADE,
 		related_name='game_client', null=True
 	)
-	channel_name = models.TextField()
+	channel_game = models.TextField()
+	channel_chat = models.TextField(null=True, blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):

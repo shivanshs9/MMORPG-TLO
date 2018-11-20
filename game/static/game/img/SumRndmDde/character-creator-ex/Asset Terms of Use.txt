@@ -1,0 +1,13 @@
+ - All the character pieces here were taken from 
+   RPG Maker MV's Character Geneator source files and 
+   editted to fit with the Character Creator system.
+   I do not claim ownership of the provided assets.
+
+ - Pieces originally formatted for Character Creator by SumRndmDde.
+ - Some work was supported by Snowie!
+ - Fixes were made by Rhino!
+
+Please give credit to all parties mentioned if you use these character pieces!
+
+Besides that, the terms for the assets are the same as the Kadokawa's original 
+terms for using the generator images.

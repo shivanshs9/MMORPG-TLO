@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.functional import cached_property
 
 
 def player_avatar_path(instance, filename):
@@ -31,7 +32,8 @@ class Player(AbstractUser):
 	)
 
 	def __str__(self):
-		if self.ign:
-			return f'Player: {self.ign}'
-		else:
-			return f'User: {self.username}'
+		return self.display_name
+
+	@cached_property
+	def display_name(self):
+		return self.ign or self.username
