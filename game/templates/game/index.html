@@ -16,6 +16,8 @@
 
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="css/MMO.css">
+        <link rel="stylesheet" type="text/css" href="css/offline-theme-dark.css">
+        <link rel="stylesheet" type="text/css" href="css/offline-language-english.css">
 
         <title>The Lost Origins</title>
     </head>
@@ -26,6 +28,7 @@
         <script type="text/javascript" src="js/libs/jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="js/libs/rewebsocket.min.js"></script>
         <script type="text/javascript" src="js/libs/util.js"></script>
+        <script type="text/javascript" src="js/libs/offline.min.js"></script>
 
         <script type="text/javascript" src="js/libs/pixi.js"></script>
         <script type="text/javascript" src="js/libs/pixi-tilemap.js"></script>
@@ -43,6 +46,14 @@
         <script type="text/javascript" src="js/main.js"></script>
 
         <script>
+            Offline.options = {
+                game: true,
+                checks: {
+                    xhr: {url: "{% url 'web:connection-test' %}"},
+                }
+            };
+            Offline.check();
+
             var $htmlLoginForm = `
                     {% include "authentication/login_form.htm" %}
                 `

@@ -601,7 +601,12 @@ _.params['Decrypter Ignore List'].forEach(function(url, i, array) {
 	array[i] = 'img/' + url;
 });
 
+try {
 _.isNewNWjs = process.versions['node-webkit'] >= "0.13.0" && Utils.RPGMAKER_VERSION >= "1.6.0";
+} catch (error) {
+console.log("Not using NW.js");
+_.isNewNWjs = false;
+}
 
 //-----------------------------------------------------------------------------
 // SRD.GameUpgrade.windowSettings

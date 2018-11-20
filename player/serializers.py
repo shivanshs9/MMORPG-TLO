@@ -9,3 +9,6 @@ class PlayerDetailsSerializer(serializers.ModelSerializer):
 		fields = (
 			'pk', 'ign', 'art', 'level', 'gold', 'avatar_uri'
 		)
+		read_only_fields = (
+			'pk',
+		)

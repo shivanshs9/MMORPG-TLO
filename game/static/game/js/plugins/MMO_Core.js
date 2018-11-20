@@ -105,12 +105,19 @@ function MMO_Game_Network() {
       console.log('Missing token!');
       return;
     }
+    let options = {
+      debug: true,
+    }
     this._sockets[socket_name] = new ReWebSocket(
-      this.getSocketUrl(endpoint), ['Token', this._token], {debug: true});
+      this.getSocketUrl(endpoint), ['Token', this._token], options);
     var socket = this._sockets[socket_name];
     var _socket_send = socket.send;
     socket.send = function(data) {
-      _socket_send(JSON.stringify(data));
+      try {
+        _socket_send(JSON.stringify(data));
+      } catch(error) {
+        console.error(error);
+      }
     };
     socket.onopen = function(event) {
       console.log('Socket Opened: ' + event.currentTarget.url);
@@ -158,12 +165,22 @@ MMO_Game_Network.prototype.postLogin = function() {
   socket.onopen = function(event) {
     _socket_onopen.call(this, event);
     alertToast("You're online!");
+
+    Offline.options.checks.active = 'up';
+    Offline.check();
+
+    SceneManager.resume();
   };
+
   var _socket_onclose = socket.onclose;
   socket.onclose = function(event) {
     _socket_onclose.call(this, event);
     alertToast("You're offline!");
-  }
+
+    Offline.options.checks.active = 'down';
+    Offline.check();
+    SceneManager.stop();
+  };
 }
 
 //----------------------------------------------------------------------------

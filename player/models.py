@@ -14,7 +14,9 @@ class Player(AbstractUser):
 	ART_MAGE = 'Mage'
 	ART_PRIEST = 'Priest'
 	ART_BARBARIAN = 'Barbarian'
+	ART_UNKNOWN = 'Unknown'
 	PLAYER_ART_CHOICES = [
+		(ART_UNKNOWN, 'Unknown'),
 		(ART_ROUGE, 'Rouge'),
 		(ART_MAGE, 'Mage'),
 		(ART_PRIEST, 'Priest'),

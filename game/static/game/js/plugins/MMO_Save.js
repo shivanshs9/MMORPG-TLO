@@ -116,7 +116,7 @@ _.savePlayerStats = function(actor) {
   let art = actor.currentClass().name;
   let data = {
     ign: ign,
-    avatar: avatarUri,
+    avatar_uri: avatarUri,
     level: level,
     gold: gold,
     art: art
