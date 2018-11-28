@@ -69,7 +69,8 @@ class GameMapConsumer(AbstractConsumer):
 
     def cleanup(self):
         super().cleanup()
-        self.leave_map({})
+        if hasattr(self, 'group'):
+            self.leave_map({})
 
     def read_command(self, command):
         if command == GameMapConsumer.COMMAND_UPDATE_SELF:

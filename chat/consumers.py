@@ -17,7 +17,7 @@ class ChatConsumer(JsonWebsocketConsumer):
     MESSAGE_TYPE_ALTER_ROOM = 'chat.alter_room'
     MESSAGE_TYPE_LIST_ROOMS = 'chat.list_rooms'
 
-    COMMAND_LIST_ROOMS = 'chat.list_room'
+    COMMAND_LIST_ROOMS = 'chat.list_rooms'
     COMMAND_ROOM_LIST_MESSAGES = 'chat.room.list_messages'
     COMMAND_ROOM_LIST_PLAYERS = 'chat.room.list_players'
     COMMAND_JOIN_ROOM = 'chat.join_room'
@@ -28,11 +28,18 @@ class ChatConsumer(JsonWebsocketConsumer):
         self.user = self.scope['user']
         if not self.user.is_authenticated:
             return
-        self.accept('Token' if self.scope['subprotocols'] else None)
-        self.initialize()
+        if self.update_client():
+            self.accept('Token' if self.scope['subprotocols'] else None)
+            self.initialize()
+
+    def update_client(self):
+        clients = Client.objects.filter(player=self.user)
+        if clients:
+            clients.update(channel_chat=self.channel_name)
+            return True
+        return False
 
     def initialize(self):
-        Client.objects.filter(player=self.user).update(channel_chat=self.channel_name)
         self.list_rooms()
         self.join_rooms()
 
@@ -56,7 +63,11 @@ class ChatConsumer(JsonWebsocketConsumer):
 
     def list_room_messages(self, room):
         msgs = models.ChatMessage.objects.filter(chat__name=room)
-        data = serializers.ChatMessageSerializer(msgs, many=True).data
+        data = serializers.ChatMessageSerializer(
+            msgs, many=True, context={
+                'user': self.user
+            }
+        ).data
 
         self.send_json({
             "type": ChatConsumer.MESSAGE_TYPE_ROOM_LIST_MESSAGES,
@@ -67,19 +78,29 @@ class ChatConsumer(JsonWebsocketConsumer):
     def create_or_join_room(self, content):
         room = content['room']
         content['user'] = self.user
+        if content.pop('ephemeral', False):
+            async_to_sync(self.channel_layer.group_add)(room, self.channel_name)
+            self.broadcast_new_room({'room': room})
+            return
         chat, users = models.ChatRoom.objects.new_or_add_users(**content)
         clients = Client.objects.filter(
             player__in=users, channel_chat__isnull=False)
         for client in clients:
-            self.room_new_member(room, client.player.display_name)
+            self.room_new_member(room, client.player)
             async_to_sync(self.channel_layer.group_add)(room, client.channel_chat)
             async_to_sync(self.channel_layer.send)(
                 client.channel_chat,
                 {
-                    "type": ChatConsumer.MESSAGE_TYPE_NEW_ROOM,
+                    "type": "broadcast.new_room",
                     "room": room
                 }
             )
+
+    def broadcast_new_room(self, event):
+        self.send_json({
+            "type": ChatConsumer.MESSAGE_TYPE_NEW_ROOM,
+            "room": event['room']
+        })
 
     def room_new_member(self, room, player):
         async_to_sync(self.channel_layer.group_send)(
@@ -87,7 +108,7 @@ class ChatConsumer(JsonWebsocketConsumer):
             {
                 "type": "broadcast.room.new_member",
                 "room": room,
-                "user": player
+                "user": str(player)
             }
         )
 
@@ -108,7 +129,7 @@ class ChatConsumer(JsonWebsocketConsumer):
                 {
                     "type": 'broadcast.room.leave_member',
                     "room": room,
-                    "user": self.user,
+                    "user": str(self.user),
                 }
             )
         except models.ChatRoom.DoesNotExist:
@@ -135,28 +156,30 @@ class ChatConsumer(JsonWebsocketConsumer):
     def room_send_message(self, room, msg):
         try:
             chat = models.ChatRoom.objects.get(name=room)
-            instance = models.ChatMessage(
-                body=msg, sender=self.user, chat=chat
-            )
-            data = serializers.ChatMessageSerializer(instance).data
-            async_to_sync(self.channel_layer.group_send)(
-                room,
-                {
-                    "type": "broadcast.room.new_message",
-                    "room": room,
-                    "data": data
-                }
-            )
-            if chat.persist_messages:
-                instance.save()
         except models.ChatRoom.DoesNotExist:
-            print(f'Chat "{room}" does not exists!')
+            chat = None
+        instance = models.ChatMessage(
+            body=msg, sender=self.user, chat=chat
+        )
+        data = serializers.ChatMessageSerializer(
+            instance, context={'user': None}).data
+        async_to_sync(self.channel_layer.group_send)(
+            room,
+            {
+                "type": "broadcast.room.new_message",
+                "room": room,
+                "data": data
+            }
+        )
+        if chat and chat.persist_messages:
+            instance.save()
 
     def broadcast_room_new_message(self, event):
         self.send_json({
             "type": ChatConsumer.MESSAGE_TYPE_ROOM_NEW_MESSAGE,
             "room": event['room'],
-            "data": event['data']
+            "data": event['data'],
+            "is_self": event['data']['sender_name'] == str(self.user)
         })
 
     def receive_json(self, content, **kwargs):

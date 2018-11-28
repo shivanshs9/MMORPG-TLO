@@ -17,7 +17,7 @@ class GameConsumer(JsonWebsocketConsumer):
         self.group = 'game'
         self.player = self.scope['user']
         self.id = self.player.username
-        if not self.can_user_play():
+        if not self.setup_user_play():
             return
         self.accept('Token' if self.scope['subprotocols'] else None)
         self.new_player()
@@ -26,11 +26,13 @@ class GameConsumer(JsonWebsocketConsumer):
     def initialize(self):
         self.consume_map = GameMapConsumer(self)
 
-    def can_user_play(self):
+    def setup_user_play(self):
         if not self.player.is_authenticated:
             return False
-        if Client.objects.filter(player=self.player).exists():
-            Client.objects.filter(player=self.player).delete()
+        clients = Client.objects.filter(player=self.player)
+        if not clients.exists():
+            Client.objects.create(
+                player=self.player, channel_game=self.channel_name)
         return True
 
     def describe_player(self, player):
@@ -49,7 +51,6 @@ class GameConsumer(JsonWebsocketConsumer):
         )
         async_to_sync(self.channel_layer.group_add)(
             self.group, self.channel_name)
-        Client.objects.create(player=self.player, channel_game=self.channel_name)
         self.describe_player(self.player)
         self.send_users()
 
@@ -68,7 +69,7 @@ class GameConsumer(JsonWebsocketConsumer):
         self.cleanup()
 
     def leave_player(self, player):
-        Client.objects.filter(player=player).delete()
+        Client.objects.filter(player=self.player).delete()
         async_to_sync(self.channel_layer.group_send)(
             self.group,
             {

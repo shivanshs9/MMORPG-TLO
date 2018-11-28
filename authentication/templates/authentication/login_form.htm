@@ -12,7 +12,6 @@
 	</div><br />
 	<button id="btnConnect" class="btn btn-primary">Connect</button>
 	<button id="btnRegister" class="btn btn-default">Register</button>
-	<button id="btnForgotPassword" class="btn btn-link btn-sm">Forgot Password?</button>
 	</div>
 </div>
 
@@ -52,6 +51,6 @@
 		$authFormLogin.callSubmitHandler()
 	});
 	$("#btnRegister").bind("click touchstart",function() {
-		window.open('auth/register', '_blank').focus()
+		window.open('/auth/', '_blank').focus()
 	});
 <\/script>

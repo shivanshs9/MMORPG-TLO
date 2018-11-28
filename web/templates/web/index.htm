@@ -9,7 +9,7 @@
 <div id="header-wrapper" class="header-slider">
 	<header class="clearfix">
 		<div class="logo">
-			<img src="https://via.placeholder.com/180/000000/FFFFFF?text=Placeholder+logo" alt="TLO Logo" />
+			<img src="{% static 'img/logo.png' %}" alt="TLO" />
 		</div>
 		<div class="container">
 			<div class="row">
@@ -18,17 +18,17 @@
 						<ul class="slides">
 							<li>
 								<p class="home-slide-content">
-									Point 1
+									Choose Role!
 								</p>
 							</li>
 							<li>
 								<p class="home-slide-content">
-									Point 2
+									Play!
 								</p>
 							</li>
 							<li>
 								<p class="home-slide-content">
-									Point 3
+									Have Fun!
 								</p>
 							</li>
 						</ul>
@@ -52,7 +52,7 @@
 		<div class="row">
 			<div class="span6 alignright flyLeft">
 				<blockquote class="large">
-					Some quote for large banner <cite>Citations are important</cite>
+					We cannot change the cards we are dealt, just play the game. <cite>Krishna Teja</cite>
 				</blockquote>
 			</div>
 			<div class="span6 aligncenter flyRight">
@@ -71,7 +71,11 @@
 				<div>
 					<h2>The game is not for <strong>faint-hearted!</strong></h2>
 					<p>
-						Aut qui vitae fugit rerum architecto quidem. Ullam et nobis corporis. Soluta adipisci sunt at fugiat repellendus ut fugiat. Et sunt autem officiis quas libero quos.
+						This project aims to develop a MMORPG game using RPG Maker MV game engine, which is infamous for 
+						supporting only single-player game. For the web server, the infamous Django web framework is used. 
+						However, it uses ASGI, instead of WSGI, for providing an Asynchronous server interface which Django 
+						painfully lacks. To support real-time communication between game clients and server, websockets 
+						technology is used which is implemented in Django using the Channels library.
 					</p>
 				</div>
 			</div>
@@ -84,7 +88,7 @@
 		<div class="row">
 			<div class="span2 offset4 animated-slow flyIn">
 				<div class="people">
-					<img class="team-thumb img-circle" src="https://via.placeholder.com/180" alt="" />
+					<img class="team-thumb img-circle" src="https://scontent-bom1-2.xx.fbcdn.net/v/t1.0-9/32169381_1232940216836631_4298973620018872320_n.jpg?_nc_cat=103&_nc_ht=scontent-bom1-2.xx&oh=017b121e84d2a0a8a3d70a97cad5d5c5&oe=5CAE35BF" alt="" />
 					<h3>TheFaker</h3>
 					<p>
 						Game director
@@ -110,7 +114,7 @@
 		<div class="row">
 			<div class="span12 aligncenter flyLeft">
 				<blockquote class="large">
-					Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+					Talent wins games, but Teamwork and Intelligence wins championships.
 				</blockquote>
 			</div>
 			<div class="span12 aligncenter flyRight">
@@ -204,9 +208,6 @@
 			</div>
 		</div>
 		<div class="blankdivider30"></div>
-		<div class="aligncenter">
-			<a href="#" class="btn btn-large btn-theme">More blog post</a>
-		</div>
 	</div>
 </section>
 
@@ -214,10 +215,6 @@
 <section id="contact" class="section green">
 	<div class="container">
 		<h4>Get in Touch</h4>
-		<p>
-			Reque facer nostro et ius, cu persius mnesarchum disputando eam, clita prompta et mel vidisse phaedrum pri et. Facilisis posidonium ex his. Mutat iudico vis in, mea aeque tamquam scripserit an, mea eu ignota viderer probatus. Lorem legere consetetur ei
-			eum. Sumo aeque assentior te eam, pri nominati posidonium consttuam
-		</p>
 		<div class="blankdivider30">
 		</div>
 		<div class="row">
@@ -284,17 +281,5 @@
 <a href="#" class="scrollup"><i class="icon-angle-up icon-square icon-bgdark icon-2x"></i></a>
 {% endblock %}
 
-{% block scripts %}
-<script src="{% static 'js/jquery.js' %}"></script>
-<script src="{% static 'js/jquery.scrollTo.js' %}"></script>
-<script src="{% static 'js/jquery.nav.js' %}"></script>
-<script src="{% static 'js/jquery.localScroll.js' %}"></script>
-<script src="{% static 'js/bootstrap.js' %}"></script>
-<script src="{% static 'js/isotope.js' %}"></script>
-<script src="{% static 'js/jquery.flexslider.js' %}"></script>
-<script src="{% static 'js/inview.js' %}"></script>
-<script src="{% static 'js/animate.js' %}"></script>
-<script src="{% static 'js/custom.js' %}"></script>
-{% endblock %}
 
 {% block nav_home %} active{% endblock %}

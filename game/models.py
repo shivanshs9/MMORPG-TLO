@@ -38,7 +38,7 @@ class Client(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
-		return f'{self.player} @{self.channel_name}'
+		return f'{self.player} @{self.channel_game}'
 
 
 @receiver(post_save, sender=UserModel, dispatch_uid='new_save')

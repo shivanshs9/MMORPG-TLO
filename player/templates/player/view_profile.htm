@@ -1,0 +1,61 @@
+{% extends "_base.htm" %}
+
+{% load static %}
+
+{% block title %}{{ request.user }}{% endblock %}
+
+{% block content %}
+<section class="spacer green">
+	<div class="container">
+		<div class="row">
+			<div class="span12 aligncenter flyUp">
+				<h2 class="pagetitle">{{ request.user }}</h2>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="maincontent" class="inner">
+	<div class="container">
+		<div class="row">
+			<div class="span12 aligncenter">
+				{% if data.2 %}
+				<img class="avatar" src="{{ data.2 }}" />
+				{% endif %}
+				<p>Name: {{ data.3 }} {{ data.4 }}</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span6 aligncenter">
+				Username: {{ data.0 }}
+			</div>
+			<div class="span6 aligncenter">
+				E-mail: {{ data.5 }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="span6 aligncenter">
+				Art: {{ data.8 }}
+			</div>
+			<div class="span6 aligncenter">
+				Level: {{ data.6 }}
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+	#maincontent .container {
+		background: #ffffff;
+		box-shadow: 3px 3px 3px 0px #000000;
+		padding-top: 10px;
+	}
+
+	body {
+		background: #faf5f5;
+	}
+</style>
+{% endblock %}

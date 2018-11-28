@@ -3,6 +3,8 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from chat.validators import room_name_validator
+
 UserModel = get_user_model()
 
 
@@ -35,7 +37,7 @@ class ChatRoomQuerySet(models.QuerySet):
 				ChatMember.objects.create(user=user, chat=chat)
 				new_users.append(user)
 		except ChatRoom.DoesNotExist:
-			chat = self.create(room=room, persist_messages=persist_messages)
+			chat = self.create(name=room, persist_messages=persist_messages)
 			ChatMember.objects.create(user=user, chat=chat, is_admin=True, is_owner=True)
 			new_users.append(user)
 			created = True
@@ -57,7 +59,8 @@ class ChatRoom(models.Model):
 		max_length=15, default='Unknown', unique=True,
 		error_messages={
 			"unique": 'The room name is already taken!'
-		}
+		},
+		validators=(room_name_validator, )
 	)
 	users = models.ManyToManyField(
 		UserModel, through='ChatMember',
@@ -103,4 +106,4 @@ class ChatMessage(models.Model):
 	body = models.TextField()
 
 	def __str__(self):
-		return f'{self.chat} - {self.message}'
+		return f'{self.chat} - {self.body}'

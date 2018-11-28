@@ -25,12 +25,15 @@ class TokenAuthMiddleware:
 		if b'sec-websocket-protocol' in headers:
 			token_name, token = headers[b'sec-websocket-protocol'].decode().split(',')
 			token = token.strip()
-			if token_name != 'Token':
-				raise exceptions.AuthenticationFailed('Invalid header!')
-			user = backends.TokenBackend().authenticate(scope, token=token)
-			if not user:
-				raise exceptions.AuthenticationFailed('Authentication failed!')
-			scope['user'] = user
+			try:
+				if token_name != 'Token':
+					raise exceptions.AuthenticationFailed('Invalid header!')
+				user = backends.TokenBackend().authenticate(scope, token=token)
+				if not user:
+					raise exceptions.AuthenticationFailed('Authentication failed!')
+				scope['user'] = user				
+			except exceptions.AuthenticationFailed as e:
+				scope['error'] = e
 			close_old_connections()
 		return self.inner(scope)
 

@@ -1,30 +1,5 @@
-Input.keyMapper = {
-    8: 'backspace',  // backspace
-    9: 'tab',       // tab
-    13: 'ok',       // enter
-    16: 'shift',    // shift
-    17: 'control',  // control
-    18: 'control',  // alt
-    27: 'escape',   // escape
-    32: 'ok',       // space
-    33: 'pageup',   // pageup
-    34: 'pagedown', // pagedown
-    37: 'left',     // left arrow
-    38: 'up',       // up arrow
-    39: 'right',    // right arrow
-    40: 'down',     // down arrow
-    45: 'escape',   // insert
-    81: 'pageup',   // Q
-    87: 'pagedown', // W
-    88: 'escape',   // X
-    90: 'ok',       // Z
-    96: 'escape',   // numpad 0
-    98: 'down',     // numpad 2
-    100: 'left',    // numpad 4
-    102: 'right',   // numpad 6
-    104: 'up',      // numpad 8
-    120: 'debug'    // F9
-};
+Input.keyMapper[8] = 'backspace';
+
 Window_NameInput.prototype.processHandling = function() {
     if (this.isOpen() && this.active) {
         if (Input.isTriggered('shift')) {
@@ -33,8 +8,39 @@ Window_NameInput.prototype.processHandling = function() {
         if (Input.isRepeated('backspace')) {
             this.processBack();
         }
+        if (Input.isRepeated('cancel')) {
+            this.processBack();
+        }
         if (Input.isRepeated('ok')) {
             this.processOk();
         }
     }
 };
+
+Input._shouldPreventDefault = function(e) {
+    if ($(e.target).is("input, textarea"))
+        return false
+    switch (e.keyCode) {
+        case 8:     // backspace
+        case 33:    // pageup
+        case 34:    // pagedown
+        case 37:    // left arrow
+        case 38:    // up arrow
+        case 39:    // right arrow
+        case 40:    // down arrow
+            return true;
+    }
+    return false;
+};
+
+//----------------------------------------------------------------------------
+// Patch for YEP_ButtonCommonEvents
+//----------------------------------------------------------------------------
+(function(_) {
+var _updateButtonEvents = Scene_Map.prototype.updateButtonEvents;
+Scene_Map.prototype.updateButtonEvents = function() {
+    if ($(document.activeElement).is('input', 'textarea'))
+        return;
+    _updateButtonEvents.call(this);
+}
+})();

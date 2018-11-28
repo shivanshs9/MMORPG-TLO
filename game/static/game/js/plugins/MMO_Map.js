@@ -72,10 +72,10 @@ _._commandLeaveMap = "map.leave_map";
 _._messageUpdatePlayer = "map.update_player";
 _._messageLeavePlayer = "map.leave_player";
 
-_.getEndpoint = function(mapId) {
-    return _.gameMapSocket.interpolate({map_id: mapId});
-};
 
+//----------------------------------------------------------------------------
+// MMO.Map
+//----------------------------------------------------------------------------
 _.setupSocket = function() {
     if (_._socket)
         return;

@@ -100,10 +100,6 @@ MMO_Scene_Auth_Login.prototype.initialize = function() {
     Scene_Base.prototype.initialize.call(this);
 };
 
-MMO_Scene_Auth_Login.prototype.reBindInput = function() {
-    Input.initialize();
-};
-
 MMO_Scene_Auth_Login.prototype.create = function() {
     Scene_Base.prototype.create.call(this);
     this.createBackground();
@@ -130,6 +126,13 @@ MMO_Scene_Auth_Login.prototype.terminate = function() {
     SceneManager.snapForBackground();
 };
 
+MMO_Scene_Auth_Login.prototype.reloadMapIfUpdated = function() {
+  if ($gameSystem.versionId() !== $dataSystem.versionId) {
+      $gamePlayer.reserveTransfer($gameMap.mapId(), $gamePlayer.x, $gamePlayer.y);
+      $gamePlayer.requestMapReload();
+  }
+};
+
 MMO_Scene_Auth_Login.prototype.createLoginForm = function() {
   $("#ErrorPrinter").html(window.$htmlLoginForm);
   this.loginFormHandler = window.$htmlLoginFormHandler(
@@ -141,10 +144,10 @@ MMO_Scene_Auth_Login.prototype.successLogin = function(token) {
   $gameNetwork.setToken(token);
   if (_.autoLoadGame) {
     this.fadeOutAll();
-    if (DataManager.isAnySavefileExists())
-      SceneManager.push(Scene_Load);
-    else
-      SceneManager.push(Scene_Map);
+    if (DataManager.isAnySavefileExists() && DataManager.loadGame(1))
+      this.fadeOutAll();
+      this.reloadMapIfUpdated();
+    SceneManager.push(Scene_Map);
   } else {
     SceneManager.goto(Scene_Title);
   }
@@ -177,7 +180,7 @@ MMO_Scene_Auth_Login.prototype.attemptLogin = function(params) {
   .fail(function (jqXHR) {
     var data = jqXHR.responseJSON;
     console.error(data);
-    return that.loginFormHandler.displayError("Error: " + data[0]);
+    return that.loginFormHandler.displayError("Error: " + data);
   });
 };
 
