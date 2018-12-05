@@ -369,7 +369,7 @@ header .logo {
 
 /* --- Header slider --- */
 #header-wrapper.header-slider {
-	background: #444 url(https://via.placeholder.com/1990x1200?text=Placeholder+background) no-repeat center center fixed;
+	background: #444 url(../img/cover1.png) no-repeat center center fixed;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -496,7 +496,7 @@ section.spacer.bg2 {
 }
 
 section.spacer.bg3 {
-	background: url(https://via.placeholder.com/1990x1200?text=Placeholder+background) 50% 0 no-repeat fixed;
+	background: url(../img/cover2.png) 50% 0 no-repeat fixed;
 	width:100%;
 	height:auto;
 	margin:0;

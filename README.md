@@ -22,12 +22,17 @@ Coming soon.
 - Channels
 
 ### Instructions
-To start up server, install all the python requirements (`pip install -r requirements.txt`) and run in shell:
+- Install *mysql* server and start it up.
+- Create a new database, called *game*, and change database settings according to your preferences.
+- To start up server, install all the python requirements (`pip install -r requirements.txt`) and run in shell:
 ```
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 ```
+
+### Documentation
+TLO Report (PDF): [Drive link](https://drive.google.com/file/d/1uehHhFvtroigx7H6xUBeLhevFLXPlVqQ/view?usp=sharing)
 
 ### Credits
 - KadoKawa for its RMMV game engine (and personally, for all its previous installments).

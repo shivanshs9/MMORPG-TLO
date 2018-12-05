@@ -464,17 +464,17 @@ $.prototype.getChatHtml = function() {
 		<div class="chat-main">
 			<div class="top-bar">
 				<span class="dropdown">
-					<a class="room-options d-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="room-options-toggle d-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fa fa-ellipsis-v" aria-hidden="true"></i>
 					</a>
-					<div class="dropdown-menu">
+					<div class="dropdown-menu room-options-list">
 						<button class="dropdown-item" type="button" id="option_details">View details</button>
 						<button class="dropdown-item" type="button" id="option_leave">Leave room</button>
 						<button class="dropdown-item" type="button" id="option_report">Report room</button>
 					</div>
 				</span>
 				<select class="selectpicker show-tick room-change" data-style="btn-primary">
-					<option class="_internal" selected="true" style="display:none" value="__none"> -- select an option -- </option>
+					<option class="_internal" selected="true" style="display:none" value="__none"> -- choose an option -- </option>
 					<option class="_internal" data-icon="fa fa-plus" value="__add_room">Join a room!</option>
 				</select>
 				<button class="btn btn-danger btn-circle chat-close" type="button">
@@ -523,7 +523,7 @@ $.prototype.getRoomChangeBox = function() {
 };
 
 $.prototype.getRoomOptions = function() {
-	let query = `div#${_._chatContainerId} a.room-options`;
+	let query = `div#${_._chatContainerId} div.room-options-list *`;
 	return document.querySelector(query);
 };
 
@@ -564,12 +564,12 @@ $.prototype.showInputBar = function() {
 
 $.prototype.hideRoomOptions = function() {
 	var $ = jQuery;
-	$(this.getRoomOptions()).addClass('d-none');
+	$(`div#${_._chatContainerId} a.room-options-toggle`).addClass('d-none');
 };
 
 $.prototype.showRoomOptions = function() {
 	var $ = jQuery;
-	$(this.getRoomOptions()).removeClass('d-none');
+	$(`div#${_._chatContainerId} a.room-options-toggle`).removeClass('d-none');
 };
 
 $.prototype.hasRoom = function(room) {
@@ -803,6 +803,7 @@ $.prototype.setup = function() {
 	var sendMessageBtn = this.getSendMessageBtn();
 	var openChatBtn = this.getChatOpenButton();
 	var closeChatBtn = this.getChatCloseButton();
+	let roomOptions = this.getRoomOptions();
 
 	$(roomChangeSelect).selectpicker();
 	$(chatProp).bind('click touchstart', this.onFocus.bind(this));
@@ -811,6 +812,17 @@ $.prototype.setup = function() {
 	$(roomChangeSelect).on('change', this.onRoomChange.bind(this));
 	$(closeChatBtn).bind('click', this.close.bind(this));
 	$(openChatBtn).bind('click', this.open.bind(this));
+	$(roomOptions).bind('click', function(e) {
+		let target = e.target;
+		if (target.id === 'option_details')
+			this.showRoomDetails();
+		else if (target.id === 'option_leave')
+			this.leaveRoomConfirmation();
+		else if (target.id === 'option_report')
+			this.showReportRoomDialog();
+		else
+			console.log(e);
+	});
 
 	$(window).bind('resize', this.onResize.bind(this));
 
@@ -830,8 +842,22 @@ $.prototype.open = function() {
 	$(this.getChatOpenButton()).addClass('d-none');
 };
 
+$.prototype.showRoomDetails = function() {
+
+};
+
+$.prototype.leaveRoomConfirmation = function() {
+	let result = confirm(`Are you sure you want to leave "${this.currentRoom}"`);
+	if (result)
+		_.leaveRoom(this.currentRoom);
+};
+
+$.prototype.showReportRoomDialog = function() {
+	console.log('whhyyyyyyyy????');
+};
+
 $.prototype.openDialogJoinRoom = function() {
-	console.log('join room!')
+	console.log('join room!');
 };
 
 $.prototype.setRoomChangeSelected = function(value) {

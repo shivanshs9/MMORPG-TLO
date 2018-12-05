@@ -123,18 +123,17 @@ class ChatConsumer(JsonWebsocketConsumer):
         try:
             chat = models.ChatRoom.objects.get(name=room)
             models.ChatMember.objects.filter(chat=chat, user=self.user).delete()
-            async_to_sync(self.channel_layer.group_discard)(room, self.channel_name)
-            async_to_sync(self.channel_layer.group_send)(
-                room,
-                {
-                    "type": 'broadcast.room.leave_member',
-                    "room": room,
-                    "user": str(self.user),
-                }
-            )
         except models.ChatRoom.DoesNotExist:
             pass
-        self.list_rooms()
+        async_to_sync(self.channel_layer.group_discard)(room, self.channel_name)
+        async_to_sync(self.channel_layer.group_send)(
+            room,
+            {
+                "type": 'broadcast.room.leave_member',
+                "room": room,
+                "user": str(self.user),
+            }
+        )
 
     def broadcast_room_leave_member(self, event):
         self.send_json({
