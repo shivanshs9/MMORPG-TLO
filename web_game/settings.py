@@ -100,12 +100,12 @@ WSGI_APPLICATION = 'web_game.wsgi.application'
 
 DATABASES = {
 	'default': {
-		'ENGINE': 'django.db.backends.mysql',
-		'NAME': 'game',
-		'HOST': 'localhost',
-		'PORT': 5432,
-		'USER': 'root',
-		'PASSWORD': '1999'
+		'ENGINE': 'django.db.backends.sqlite3',
+		'NAME': 'game.sqlite3',
+		#'HOST': 'localhost',
+		#'PORT': 5432,
+		#'USER': 'root',
+		#'PASSWORD': '1999'
 	}
 }
 
