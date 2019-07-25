@@ -10,7 +10,9 @@
         <link rel="icon" href="icon/icon.png" type="image/png">
         <link rel="apple-touch-icon" href="icon/icon.png">
 
-        <base href="{% static 'game/' %}" />
+        <base href="/static/game/" />
+        <!--/static/game/-->
+        {% comment %} {% static 'game/' %} {% endcomment %}
 
         <link rel="stylesheet" type="text/css" href="fonts/gamefont.css">
 
@@ -29,6 +31,25 @@
         {% include "chat/players_list.htm" %}
 
         <!--BEGIN Scripts-->
+        {% comment %} <script>
+        (function () {
+            var NativeImage;
+
+            var createImage = function () {
+                var image = new NativeImage(arguments);
+                image.crossOrigin = 'anonymous';
+                return image;
+            };
+
+            if (typeof window.Image !== 'object') {
+                NativeImage = window.Image;
+                window.Image = function () {
+                    return createImage.call(this, arguments) ;
+                };
+            }
+        }());
+        </script> {% endcomment %}
+
         <script type="text/javascript" src="js/libs/jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="js/libs/rewebsocket.min.js"></script>
         <script type="text/javascript" src="js/libs/offline.min.js"></script>
@@ -58,7 +79,7 @@
             Offline.options = {
                 game: true,
                 checks: {
-                    xhr: {url: "{% url 'web:connection-test' %}"},
+                    xhr: {url: (window.location.origin || '') + "{% url 'web:connection-test' %}"},
                 }
             };
             Offline.check();

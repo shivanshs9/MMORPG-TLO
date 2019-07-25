@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from datetime import timedelta
+import django_heroku
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'sk6mny)a5qz6^8ou80&--8u#49rb(t0h@qb(stu7xhq^0@b-ie'
+SECRET_KEY = os.environ.get('SECREY_KEY', 'sk6mny)a5qz6^8ou80&--8u#49rb(t0h@qb(stu7xhq^0@b-ie')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 
 	'rest_framework',
+	'storages',
 
 	'channels',
 	'chat',
@@ -112,7 +115,7 @@ DATABASES = {
 CACHES = {
 	'default': {
 		'BACKEND': 'redis_cache.RedisCache',
-		'LOCATION': '127.0.0.1:6379',
+		'LOCATION': os.environ.get('REDIS_URL', '127.0.0.1:6379'),
 		'KEY_PREFIX': 'tlo.',
 		'TIMEOUT': None
 	},
@@ -123,7 +126,9 @@ CHANNEL_LAYERS = {
 	'default': {
 		'BACKEND': 'channels_redis.core.RedisChannelLayer',
 		'CONFIG': {
-			"hosts": [('127.0.0.1', 6379)],
+			"hosts": [
+				os.environ.get('REDIS_URL', ('127.0.0.1', 6379))
+			],
 		},
 	},
 }
@@ -173,3 +178,10 @@ STATICFILES_DIRS = [
 AUTH_TOKEN_TTL = timedelta(days=3)
 AUTH_TOKEN_CHARACTER_LENGTH = 64
 AUTH_TOKEN_SECURE_HASH_ALGORITHM = 'Crypto.Hash.SHA3_512'
+
+
+django_heroku.settings(locals())
+
+from web_game.aws.conf import *
+
+DATABASES['default']['CONN_MAX_AGE'] = 60

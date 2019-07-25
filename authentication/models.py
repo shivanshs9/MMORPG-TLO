@@ -2,13 +2,15 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
-from . import CONSTANTS, crypto
+from . import CONSTANTS
 
 User = settings.AUTH_USER_MODEL
 
 
 class AuthTokenManager(models.Manager):
 	def create(self, user, expires=settings.AUTH_TOKEN_TTL):
+		from authentication import crypto
+
 		token = crypto.create_token_string()
 		salt = crypto.create_salt_string()
 		digest = crypto.hash_token(token, salt)
