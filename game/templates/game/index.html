@@ -10,7 +10,7 @@
         <link rel="icon" href="icon/icon.png" type="image/png">
         <link rel="apple-touch-icon" href="icon/icon.png">
 
-        <base href="/static/game/" />
+        <base href="{% static 'game/' %}" />
 
         <link rel="stylesheet" type="text/css" href="fonts/gamefont.css">
 
@@ -58,7 +58,7 @@
             Offline.options = {
                 game: true,
                 checks: {
-                    xhr: (window.location.origin || "") + {url: "{% url 'web:connection-test' %}"},
+                    xhr: {url: "{% url 'web:connection-test' %}"},
                 }
             };
             Offline.check();

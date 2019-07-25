@@ -1,3 +1,3 @@
 #!/bin/sh
 
-python manage.py collectstatic --noinput  --no-post-process
+# python manage.py collectstatic --noinput  --no-post-process
