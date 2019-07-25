@@ -183,3 +183,5 @@ AUTH_TOKEN_SECURE_HASH_ALGORITHM = 'Crypto.Hash.SHA3_512'
 django_heroku.settings(locals())
 
 from web_game.aws.conf import *
+
+DATABASES['default']['CONN_MAX_AGE'] = 60
