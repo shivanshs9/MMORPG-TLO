@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'sk6mny)a5qz6^8ou80&--8u#49rb(t0h@qb(stu7xhq^0@b-ie'
+SECRET_KEY = os.environ.get('SECREY_KEY', 'sk6mny)a5qz6^8ou80&--8u#49rb(t0h@qb(stu7xhq^0@b-ie')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 
 	'rest_framework',
+	'storages',
 
 	'channels',
 	'chat',
@@ -180,3 +181,5 @@ AUTH_TOKEN_SECURE_HASH_ALGORITHM = 'Crypto.Hash.SHA3_512'
 
 
 django_heroku.settings(locals())
+
+from web_game.aws.conf import *
