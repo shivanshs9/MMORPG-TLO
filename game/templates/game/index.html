@@ -10,8 +10,9 @@
         <link rel="icon" href="icon/icon.png" type="image/png">
         <link rel="apple-touch-icon" href="icon/icon.png">
 
-        <base href="{% static 'game/' %}" />
+        <base href="/static/game/" />
         <!--/static/game/-->
+        {% comment %} {% static 'game/' %} {% endcomment %}
 
         <link rel="stylesheet" type="text/css" href="fonts/gamefont.css">
 
@@ -30,7 +31,7 @@
         {% include "chat/players_list.htm" %}
 
         <!--BEGIN Scripts-->
-        <script>
+        {% comment %} <script>
         (function () {
             var NativeImage;
 
@@ -47,7 +48,7 @@
                 };
             }
         }());
-        </script>
+        </script> {% endcomment %}
 
         <script type="text/javascript" src="js/libs/jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="js/libs/rewebsocket.min.js"></script>
